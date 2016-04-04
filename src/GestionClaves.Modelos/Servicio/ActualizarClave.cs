@@ -1,4 +1,5 @@
-﻿using ServiceStack;
+﻿using GestionClaves.Modelos.Config;
+using ServiceStack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +17,7 @@ namespace GestionClaves.Modelos.Servicio
 
     public class ActualizarClaveResponse : IHasResponseStatus
     {
-        public ResponseStatus ResponseStatus
-        {
-            get; set;
-        }
+        public CorreoResponse CorreoResponse { get; set; }
+        public ResponseStatus ResponseStatus { get; set; }
     }
 }

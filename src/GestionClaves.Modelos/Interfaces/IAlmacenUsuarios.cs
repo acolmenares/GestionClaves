@@ -11,9 +11,9 @@ namespace GestionClaves.Modelos.Interfaces
     {
         //int ActualizarClave(ActualizarClave request);
         //Usuario ConsultarPorLoginClave(ActualizarClave request);
-        Usuario ConsultarPorLoginClave(string login, string contrasena);
+        //Usuario ConsultarPorLoginClave(string login, string contrasena);
         Usuario ConsultarPorLogin(string login);
         int ActualizarClave(Usuario usuario);
-        string GenerarClave(Usuario usuario);
+       // string GenerarClave(Usuario usuario);
     }
 }

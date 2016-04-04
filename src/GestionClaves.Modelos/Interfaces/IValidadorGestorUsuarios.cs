@@ -10,8 +10,8 @@ namespace GestionClaves.Modelos.Interfaces
 {
     public interface IValidadorGestorUsuarios
     {
-        IValidador<ActualizarClave> ValidadorActualizarClave { get; set; }
-        IValidador<Usuario> ValidadorLoginContrasena { get; set; }
+        //IValidador<ActualizarClave> ValidadorActualizarClave { get; set; }
+        //IValidador<Usuario> ValidadorLoginContrasena { get; set; }
         
         void ValidarPeticion(ActualizarClave request);
         void ValidarPeticion(GenerarContrasena request);

@@ -1,4 +1,5 @@
 ﻿using ServiceStack;
+using ServiceStack.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,8 @@ using GestionClaves.DAL;
 using GestionClaves.BL.Validadores;
 using GestionClaves.BL.Gestores;
 using GestionClaves.Modelos.Interfaces;
+using GestionClaves.BL.Utiles;
+using GestionClaves.Modelos.Config;
 
 namespace GestionClaves.WebHost
 {
@@ -29,14 +32,29 @@ namespace GestionClaves.WebHost
             Plugins.Add(new CorsFeature());
 
             var appSettings = new AppSettings();
-                        
-            var varConexionBDSeguridad = appSettings.Get<string>("ConexionBDSegurida", "APP_CONEXION_IRD_SEGURIDAD");
-            var conexionBDSeguridad = Environment.GetEnvironmentVariable(varConexionBDSeguridad);
+
+            var conexionBDSeguridad = appSettings.Get("ConexionBDSegurida", Environment.GetEnvironmentVariable("APP_CONEXION_IRD_SEGURIDAD"));
+            
             var dbfactory = new OrmLiteConnectionFactory(conexionBDSeguridad, SqlServerDialect.Provider);
 
             var almacenUsuario = new AlmacenUsuarios(dbfactory);
             var validadorUsuarios = new ValidadorGestorUsuarios();
-            var gestorUsuarios = new GestorUsuarios() { AlmacenUsuarios= almacenUsuario, ValidadorGestorUsuarios=validadorUsuarios};
+            var proveedorHash = new ProveedorHash();
+
+            var varMgConfig = appSettings.Get("MailGunConfig", Environment.GetEnvironmentVariable("APP_MAILGUNCONFIG"));
+            var mgConfig =
+                TypeSerializer.DeserializeFromString<MailGunConfig>(varMgConfig);
+                                   
+            
+            var correo = new MailGunCorreo() { Config = mgConfig };
+            var gestorUsuarios = new GestorUsuarios
+            {
+                AlmacenUsuarios = almacenUsuario,
+                ValidadorGestorUsuarios = validadorUsuarios,
+                ProveedorHash= proveedorHash,
+                Correo=correo
+                
+            };
 
             container.Register<IGestorUsuarios>(gestorUsuarios);
 

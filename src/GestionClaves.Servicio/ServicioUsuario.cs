@@ -16,14 +16,14 @@ namespace GestionClaves.Servicio
 
         public ActualizarClaveResponse Post(ActualizarClave request)
         {
-            GestorUsuarios.ActualizarContrasena(request);
-            return new ActualizarClaveResponse();
+            return GestorUsuarios.ActualizarContrasena(request);
+            
         }
 
         public GenerarContrasenaResponse Post(GenerarContrasena request)
         {
-            GestorUsuarios.GenerarContrasena(request);
-            return new GenerarContrasenaResponse();
+            return GestorUsuarios.GenerarContrasena(request);
+            
         }
     }
 }

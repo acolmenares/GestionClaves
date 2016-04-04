@@ -46,6 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\CorreoResponse.cs" />
+    <Compile Include="Config\MailGunConfig.cs" />
+    <Compile Include="Interfaces\ICorreo.cs" />
+    <Compile Include="Interfaces\IProveedorHash.cs" />
     <Compile Include="Servicio\ActualizarClave.cs" />
     <Compile Include="Excepciones\ExcepcionRN.cs" />
     <Compile Include="Interfaces\IAlmacenUsuarios.cs" />
