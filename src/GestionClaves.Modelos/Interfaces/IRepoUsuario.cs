@@ -7,11 +7,9 @@ using System.Threading.Tasks;
 
 namespace GestionClaves.Modelos.Interfaces
 {
-    public interface IAlmacenUsuarios
+    public interface IRepoUsuario:IRepo<Usuario>
     {
-       
-        Usuario ConsultarPorLogin(string login);
-        int ActualizarClave(Usuario usuario);
-       
+        Usuario ConsultarPorLogin(IConexion conexion,string login);
+        int ActualizarClave(IConexion conexion, Usuario usuario);
     }
 }

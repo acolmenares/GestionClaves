@@ -48,8 +48,13 @@
   <ItemGroup>
     <Compile Include="Config\CorreoResponse.cs" />
     <Compile Include="Config\MailGunConfig.cs" />
+    <Compile Include="Interfaces\IConexion.cs" />
     <Compile Include="Interfaces\ICorreo.cs" />
+    <Compile Include="Interfaces\IEntidad.cs" />
+    <Compile Include="Interfaces\IFabricaConexiones.cs" />
     <Compile Include="Interfaces\IProveedorHash.cs" />
+    <Compile Include="Interfaces\IRepo.cs" />
+    <Compile Include="Interfaces\IRepoUsuario.cs" />
     <Compile Include="Servicio\ActualizarClave.cs" />
     <Compile Include="Excepciones\ExcepcionRN.cs" />
     <Compile Include="Interfaces\IAlmacenUsuarios.cs" />

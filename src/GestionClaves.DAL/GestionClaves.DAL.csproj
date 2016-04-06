@@ -55,6 +55,7 @@
     <Compile Include="Almacen.cs" />
     <Compile Include="AlmacenUsuarios.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ConexionBD.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GestionClaves.Modelos\GestionClaves.Modelos.csproj">

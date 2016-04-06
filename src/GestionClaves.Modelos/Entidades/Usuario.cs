@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ServiceStack.DataAnnotations;
+using ServiceStack.Model;
+using GestionClaves.Modelos.Interfaces;
 
 namespace GestionClaves.Modelos.Entidades
 {
     [Alias("Usuarios")]
-    public class Usuario
+    public class Usuario:IHasIntId, IEntidad
     {
         public int Id { get; set; }
         public string Login { get; set; }
