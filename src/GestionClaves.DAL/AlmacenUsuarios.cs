@@ -28,7 +28,7 @@ namespace GestionClaves.DAL
                 
         public int ActualizarClave(Usuario usuario)
         {
-            Console.WriteLine(usuario.Contrasena);
+           
             using (var con = DbConnectionFactory.Open())
             {
                 var updateOnly = con.From<Usuario>().Where(q => q.Id == usuario.Id).Update(q => q.Contrasena);

@@ -54,8 +54,11 @@
   <ItemGroup>
     <Compile Include="Almacen.cs" />
     <Compile Include="AlmacenUsuarios.cs" />
+    <Compile Include="FabricaConexiones.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ConexionBD.cs" />
+    <Compile Include="Repo.cs" />
+    <Compile Include="RepoUsuario.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GestionClaves.Modelos\GestionClaves.Modelos.csproj">

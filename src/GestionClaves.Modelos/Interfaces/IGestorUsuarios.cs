@@ -9,9 +9,6 @@ namespace GestionClaves.Modelos.Interfaces
 {
     public interface IGestorUsuarios
     {
-        //IAlmacenUsuarios AlmacenUsuarios { get; set; }
-        //IValidadorGestorUsuarios ValidadorGestorUsuarios { get; set; }
-        //IProveedorHash ProveedorHash { get;set;}
         ActualizarClaveResponse ActualizarContrasena(ActualizarClave request);
         GenerarContrasenaResponse GenerarContrasena(GenerarContrasena request);
 

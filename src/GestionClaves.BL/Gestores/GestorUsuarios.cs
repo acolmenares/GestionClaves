@@ -15,10 +15,10 @@ namespace GestionClaves.BL.Gestores
         public IValidadorGestorUsuarios ValidadorGestorUsuarios { get; set; }
         public IProveedorHash ProveedorHash { get; set; }
         public ICorreo Correo { get; set; }
-
+        public IFabricaConexiones FabricaConexiones { get; set; }
+        public IRepoUsuario RepoUsuario { get; set; }
         public GestorUsuarios()
         {
-            var appSettings = new AppSettings();
         }
         
         public ActualizarClaveResponse ActualizarContrasena(ActualizarClave request)
@@ -80,5 +80,24 @@ namespace GestionClaves.BL.Gestores
 
             return new string(chars);
         }
+
+
+        public ActualizarClaveResponse ActualizarContrasenaX(ActualizarClave request)
+        {
+            ValidadorGestorUsuarios.ValidarPeticion(request);
+            var usuario=default(Usuario);
+            FabricaConexiones.EjecutarAcciones(conexion =>
+            {
+                usuario = RepoUsuario.ConsultarPorLogin(conexion, request.Login);
+                ValidadorGestorUsuarios.ValidarLoginContrasena(usuario);
+                VerificarContraseña(request, usuario);
+                AsignarContrasena(usuario, request.NuevaContrasena);
+                RepoUsuario.ActualizarClave(conexion, usuario);
+            });
+                        
+            var cr = Correo.EnviarNotificacionActualizacionContrasena(usuario);
+            return new ActualizarClaveResponse { CorreoResponse = cr };
+        }
+
     }
 }

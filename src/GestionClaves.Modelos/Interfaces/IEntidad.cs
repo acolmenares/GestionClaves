@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace GestionClaves.Modelos.Interfaces
 {
-    public interface IEntidad
-    { 
-        int Id { get; set; }
+    public interface IEntidad:IHasIntId
+    {
+        new int Id { get; set; }
     }
 }

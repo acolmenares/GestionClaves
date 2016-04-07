@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GestionClaves.Modelos.Interfaces
 {
-    public interface IRepo<T> where T: IHasIntId, IEntidad
+    public interface IRepo<T> where T:  IEntidad
     {
         List<T> Consultar(IConexion conexion, Expression<Func<T, bool>> predicate);
         T ConsultarSimple(IConexion conexion, Expression<Func<T, bool>> predicate);
@@ -17,7 +17,6 @@ namespace GestionClaves.Modelos.Interfaces
         int Actualizar(IConexion conexion, T data) ;
         void Crear(IConexion conexion, T data) ;
         int Borrar(IConexion conexion, int id);
-        void AceptarCambios(IConexion conexion);
-        void DeshacerCambios(IConexion conexion);
+        
     }
 }

@@ -10,7 +10,7 @@ using GestionClaves.Modelos.Interfaces;
 namespace GestionClaves.Modelos.Entidades
 {
     [Alias("Usuarios")]
-    public class Usuario:IHasIntId, IEntidad
+    public class Usuario: IEntidad
     {
         public int Id { get; set; }
         public string Login { get; set; }

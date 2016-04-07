@@ -9,6 +9,6 @@ namespace GestionClaves.Modelos.Interfaces
     public interface IFabricaConexiones
     {
         IConexion Crear(bool crearTransaccion =false);
-        void EjecutarAcciones(Action<IConexion> acciones, bool crearTransaccion = false);
+        void EjecutarAcciones(Action<IConexion> conexion, bool crearTransaccion = false);
     }
 }
