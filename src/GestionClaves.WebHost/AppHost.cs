@@ -14,6 +14,8 @@ using GestionClaves.BL.Gestores;
 using GestionClaves.Modelos.Interfaces;
 using GestionClaves.BL.Utiles;
 using GestionClaves.Modelos.Config;
+using ServiceStack.MiniProfiler.Data;
+using ServiceStack.MiniProfiler;
 
 namespace GestionClaves.WebHost
 {
@@ -35,9 +37,14 @@ namespace GestionClaves.WebHost
 
             var conexionBDSeguridad = appSettings.Get("ConexionBDSegurida", Environment.GetEnvironmentVariable("APP_CONEXION_IRD_SEGURIDAD"));
             
-            var dbfactory = new OrmLiteConnectionFactory(conexionBDSeguridad, SqlServerDialect.Provider);
+            var dbfactory = new OrmLiteConnectionFactory(conexionBDSeguridad, SqlServerDialect.Provider)
+            {
+                ConnectionFilter = x => new ProfiledDbConnection(x, Profiler.Current)
+            };
 
-            var almacenUsuario = new AlmacenUsuarios(dbfactory);
+            //var almacenUsuario = new AlmacenUsuarios(dbfactory);
+            var fabricaConexiones = new FabricaConexiones(dbfactory);
+            var repoUsuario = new RepoUsuario();
             var validadorUsuarios = new ValidadorGestorUsuarios();
             var proveedorHash = new ProveedorHash();
 
@@ -49,10 +56,13 @@ namespace GestionClaves.WebHost
             var correo = new MailGunCorreo() { Config = mgConfig };
             var gestorUsuarios = new GestorUsuarios
             {
-                AlmacenUsuarios = almacenUsuario,
+                //AlmacenUsuarios = almacenUsuario,
+                FabricaConexiones = fabricaConexiones,
                 ValidadorGestorUsuarios = validadorUsuarios,
                 ProveedorHash= proveedorHash,
-                Correo=correo
+                Correo=correo,
+                RepoUsuario= repoUsuario,
+                
                 
             };
 
