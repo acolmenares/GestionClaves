@@ -21,12 +21,22 @@ namespace GestionClaves.DAL
             return new ConexionBD(dbConnectionFactory, crearTransaccion);
         }
 
-        public void EjecutarAcciones(Action<IConexion> conexion, bool crearTransaccion = false)
+        public void Ejecutar(Action<IConexion> conexion, bool crearTransaccion = false)
         {
             using(var cn = new ConexionBD(dbConnectionFactory, crearTransaccion))
             {
                 conexion(cn);
             }
+        }
+
+        public T Ejecutar<T>(Func<IConexion,T> conexion, bool crearTransaccion = false) where T :IEntidad
+        {
+            var r = default(T);
+            using (var cn = new ConexionBD(dbConnectionFactory, crearTransaccion))
+            {
+                r = conexion(cn);
+            }
+            return r;
         }
     }
 }

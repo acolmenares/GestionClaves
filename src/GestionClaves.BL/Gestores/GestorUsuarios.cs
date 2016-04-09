@@ -4,6 +4,7 @@ using GestionClaves.Modelos.Interfaces;
 using GestionClaves.Modelos.Servicio;
 using ServiceStack.FluentValidation.Results;
 using ServiceStack.FluentValidation;
+using GestionClaves.Modelos.Config;
 
 namespace GestionClaves.BL.Gestores
 
@@ -24,34 +25,34 @@ namespace GestionClaves.BL.Gestores
         public ActualizarClaveResponse ActualizarContrasena(ActualizarClave request)
         {
             ValidadorGestorUsuarios.ValidarPeticion(request);
-            var usuario = default(Usuario);
-            FabricaConexiones.EjecutarAcciones(conexion =>
+            var usuario = FabricaConexiones.Ejecutar<Usuario>(conexion =>
             {
-                usuario = RepoUsuario.ConsultarPorLogin(conexion, request.Login);
-                ValidadorGestorUsuarios.ValidarLoginContrasena(usuario);
-                VerificarContraseña(request, usuario);
-                AsignarContrasena(usuario, request.NuevaContrasena);
-                RepoUsuario.ActualizarClave(conexion, usuario);
+                var u = RepoUsuario.ConsultarPorLogin(conexion, request.Login);
+                ValidadorGestorUsuarios.ValidarLoginContrasena(u);
+                VerificarContraseña(request, u);
+                AsignarContrasena(u, request.NuevaContrasena);
+                RepoUsuario.ActualizarClave(conexion, u);
+                return u;
             });
 
-            var cr = Correo.EnviarNotificacionActualizacionContrasena(usuario);
+            var cr = Correo.EnviarNotificacionActualizacionContrasena(usuario); //new CorreoResponse(); //  
             return new ActualizarClaveResponse { CorreoResponse = cr };
         }
 
         public GenerarContrasenaResponse GenerarContrasena(GenerarContrasena request)
         {
             ValidadorGestorUsuarios.ValidarPeticion(request);
-            var usuario = default(Usuario);
             var nuevaContrasena = string.Empty;
-            FabricaConexiones.EjecutarAcciones(conexion =>
-            {
-                usuario = RepoUsuario.ConsultarPorLogin(conexion, request.Login);
-                ValidadorGestorUsuarios.ValidarLogin(usuario);
-                nuevaContrasena = CreateRandomPassword();
-                AsignarContrasena(usuario, nuevaContrasena);
-                RepoUsuario.ActualizarClave(conexion, usuario);
-            });
-            var cr = Correo.EnviarNotificacionGeneracionContrasena(usuario, nuevaContrasena);
+            var usuario = FabricaConexiones.Ejecutar<Usuario>(conexion =>
+             {
+                 var u = RepoUsuario.ConsultarPorLogin(conexion, request.Login);
+                 ValidadorGestorUsuarios.ValidarLogin(u);
+                 nuevaContrasena = CreateRandomPassword();
+                 AsignarContrasena(u, nuevaContrasena);
+                 RepoUsuario.ActualizarClave(conexion, u);
+                 return u;
+             });
+            var cr = Correo.EnviarNotificacionGeneracionContrasena(usuario, nuevaContrasena); //new CorreoResponse(); //
             return new GenerarContrasenaResponse { CorreoResponse = cr };
         }
 

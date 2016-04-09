@@ -17,6 +17,7 @@ namespace GestionClaves.Modelos.Interfaces
         int Actualizar<T>(T data) where T : IHasIntId;
         void Crear<T>(T data) where T : IEntidad;
         int Borrar<T>(int id) where T : IHasIntId;
+        void IniciarTransaccion();
         void AceptarCambios();
         void DeshacerCambios();
 

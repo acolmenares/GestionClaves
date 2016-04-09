@@ -14,12 +14,24 @@ namespace GestionClaves.DAL
 {
     public class ConexionBD : IConexion
     {
-        protected IDbConnection conexion;
-        protected IDbTransaction transaccion=null;
+        protected  IDbConnection conexion;
+        protected  IDbTransaction transaccion=null;
+        
         public ConexionBD(IDbConnectionFactory dbConnectionFactory, bool crearTransaccion =false)
         {
-            var conexion = dbConnectionFactory.Open();
+            conexion = dbConnectionFactory.Open();
             if (crearTransaccion) Execute(con => transaccion = con.OpenTransaction());
+            Console.WriteLine("conexionDB conexion {0}", conexion);
+
+        }
+
+
+        public void IniciarTransaccion()
+        {
+            if (transaccion != null)
+            {
+                Execute(con => transaccion = con.OpenTransaction());
+            }
         }
 
         public void AceptarCambios()
@@ -59,23 +71,18 @@ namespace GestionClaves.DAL
 
         public List<T> Consultar<T>(Expression<Func<T, bool>> predicate)
         {
-            var l = new List<T>();
-            Execute(con => l = con.Select(predicate));
-            return l;
+            return  Execute<List<T>> (con => con.Select(predicate));
+            
         }
 
         public T ConsultarPorId<T>(int id) where T : IHasIntId
         {
-            T t = default(T);
-            Execute(con => t = con.SingleById<T>(id));
-            return t;
+            return   Execute<T>(con =>  con.SingleById<T>(id));
         }
 
         public T ConsultarSimple<T>(Expression<Func<T, bool>> predicate)
         {
-            T t = default(T);
-            Execute(con => t = con.Single(predicate));
-            return t;
+            return   Execute<T>(con => con.Single(predicate));
         }
 
         public void Crear<T>(T data) where T : IEntidad
@@ -114,5 +121,11 @@ namespace GestionClaves.DAL
         {
             acciones(conexion);
         }
+
+        protected virtual T Execute<T>(Func<IDbConnection,T> acciones)
+        {
+            return acciones(conexion);
+        }
+
     }
 }

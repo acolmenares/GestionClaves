@@ -20,7 +20,7 @@ namespace GestionClaves.DAL
 
         public Usuario ConsultarPorLogin(IConexion conexion, string login)
         {
-            return ConsultarUsuario(conexion, q => q.Contrasena == login);
+            return ConsultarUsuario(conexion, q => q.Login == login);
         }
 
 
