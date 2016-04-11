@@ -15,7 +15,7 @@ namespace GestionClaves.BL.Utiles
     {
         public MailGunConfig Config { get; set; }
 
-        public CorreoResponse EnviarNotificacionGeneracionContrasena(Usuario usuario, string nuevaContrasena)
+        public MailResponse EnviarNotificacionGeneracionContrasena(Usuario usuario, string nuevaContrasena)
         {
             RestClient client = new RestClient();
             client.BaseUrl = new Uri(Config.Uri);
@@ -33,12 +33,10 @@ namespace GestionClaves.BL.Utiles
             request.Method = Method.POST;
             var r =client.Execute<MailGunResponse>(request);
             
-            
-            Console.WriteLine(r.Content);
             return ConvertirACorreoResponse(r);
         }
 
-        public CorreoResponse EnviarNotificacionActualizacionContrasena(Usuario usuario)
+        public MailResponse EnviarNotificacionActualizacionContrasena(Usuario usuario)
         {
             RestClient client = new RestClient();
             client.BaseUrl = new Uri(Config.Uri);
@@ -55,13 +53,34 @@ namespace GestionClaves.BL.Utiles
             request.AddParameter("text", "Su contraseña ha sido actualizada");
             request.Method = Method.POST;
             var r = client.Execute<MailGunResponse>(request);
-            Console.WriteLine(r.Content);
             return ConvertirACorreoResponse(r);
         }
 
-        private CorreoResponse ConvertirACorreoResponse(IRestResponse<MailGunResponse> response)
+        public MailResponse EnviarTokenGeneracionContrasena(Usuario usuario)
         {
-            var r = new CorreoResponse();
+            RestClient client = new RestClient();
+            client.BaseUrl = new Uri(Config.Uri);
+            client.Authenticator =
+                    new HttpBasicAuthenticator("api",
+                                               Config.SecretApiKey);
+            RestRequest request = new RestRequest();
+            request.AddParameter("domain",
+                                 Config.Domain, ParameterType.UrlSegment);
+            request.Resource = "{domain}/messages";
+            request.AddParameter("from", Config.From);
+            request.AddParameter("to", usuario.Email);
+            request.AddParameter("subject", "Solicitud Generación nueva contraseña");
+            request.AddParameter("text", usuario.Token);
+            request.Method = Method.POST;
+            var r = client.Execute<MailGunResponse>(request);
+
+            return ConvertirACorreoResponse(r);
+        }
+
+
+        private MailResponse ConvertirACorreoResponse(IRestResponse<MailGunResponse> response)
+        {
+            var r = new MailResponse();
             if (response.Data != default(MailGunResponse))
             {
                 r.Id = response.Data.id;
@@ -79,25 +98,28 @@ namespace GestionClaves.BL.Utiles
             switch (response.ResponseStatus)
             {
                 case ResponseStatus.None:
-                    r.Status = CorreoResponseStatus.None;
+                    r.Status = MailResponseStatus.None;
                     break;
                 case ResponseStatus.Completed:
-                    r.Status = CorreoResponseStatus.Completed;
+                    r.Status = MailResponseStatus.Completed;
                     break;
                 case ResponseStatus.Error:
-                    r.Status = CorreoResponseStatus.Error;
+                    r.Status = MailResponseStatus.Error;
                     break;
                 case ResponseStatus.TimedOut:
-                    r.Status = CorreoResponseStatus.TimedOut;
+                    r.Status = MailResponseStatus.TimedOut;
                     break;
                 case ResponseStatus.Aborted:
-                    r.Status = CorreoResponseStatus.Aborted;
+                    r.Status = MailResponseStatus.Aborted;
                     break;
                 default:
                     break;
             }
             return r;
         }
+
+        
+
         class MailGunResponse {
             public string id { get; set; }
             public string message { get; set; }

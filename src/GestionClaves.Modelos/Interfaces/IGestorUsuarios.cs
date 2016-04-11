@@ -11,6 +11,6 @@ namespace GestionClaves.Modelos.Interfaces
     {
         ActualizarContrasenaResponse ActualizarContrasena(ActualizarContrasena request);
         GenerarContrasenaResponse GenerarContrasena(GenerarContrasena request);
-
+        SolicitarGeneracionContrasenaResponse SolicitarGeneracionContrasena(SolicitarGeneracionContrasena request);
     }
 }

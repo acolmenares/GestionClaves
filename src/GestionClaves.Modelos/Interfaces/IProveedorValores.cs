@@ -11,5 +11,6 @@ namespace GestionClaves.Modelos.Interfaces
         string CrearTextoCaptcha();
         string CrearContrasenaAleatoria();
         string GenerarBase64Captcha(string texto);
+        string CrearToken();
     }
 }

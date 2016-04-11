@@ -21,8 +21,21 @@ namespace GestionClaves.Servicio
 
         public GenerarContrasenaResponse Post(GenerarContrasena request)
         {
-            return GestorUsuarios.GenerarContrasena(request);
-            
+            return GestorUsuarios.GenerarContrasena(request);    
         }
+
+        public SolicitarGeneracionContrasenaResponse Post(SolicitarGeneracionContrasena request)
+        {
+            ValidarCaptcha(request);
+            Captcha = "";
+            return GestorUsuarios.SolicitarGeneracionContrasena(request);
+        }
+
+        private void ValidarCaptcha(SolicitarGeneracionContrasena request)
+        {
+            ValidateAndThrow(() => !string.IsNullOrEmpty(request.Captcha), "Captcha", "Debe Indicar el texto Captcha", "");
+            ValidateAndThrow(() => request.Captcha==Captcha, "Captcha", "Texto Captcha no válido", "");
+        }
+
     }
 }

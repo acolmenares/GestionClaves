@@ -11,13 +11,13 @@ namespace GestionClaves.Modelos.Servicio
     public class ActualizarContrasena:IReturn<ActualizarContrasenaResponse>
     {
         public string Usuario { get; set; }
-        public string AntiguaContrasena { get; set; }
+        public string ContrasenaActual { get; set; }
         public string NuevaContrasena { get; set; }
     }
 
     public class ActualizarContrasenaResponse : IHasResponseStatus
     {
-        public CorreoResponse CorreoResponse { get; set; }
+        public MailResponse CorreoResponse { get; set; }
         public ResponseStatus ResponseStatus { get; set; }
     }
 }

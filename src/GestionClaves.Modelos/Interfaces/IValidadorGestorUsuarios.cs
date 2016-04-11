@@ -18,7 +18,6 @@ namespace GestionClaves.Modelos.Interfaces
 
         void ValidarActivo(Usuario usuario);
         void ValidarActivoConCorreo(Usuario usuario);
-
-
+        void ValidarPeticion(SolicitarGeneracionContrasena request);
     }
 }

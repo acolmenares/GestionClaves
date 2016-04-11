@@ -43,8 +43,10 @@ namespace GestionClaves.BL.Gestores
             {
                 var u = RepoUsuario.ConsultarPorNombreUsuario(conexion, request.Usuario);
                 ValidadorGestorUsuarios.ValidarActivoConCorreo(u);
+                VerificarToken(request, u);
                 nuevaContrasena = Valores.CrearContrasenaAleatoria();
                 AsignarContrasena(u, nuevaContrasena);
+                u.Token = "";
                 RepoUsuario.ActualizarContrasena(conexion, u);
                 return u;
             });
@@ -52,10 +54,14 @@ namespace GestionClaves.BL.Gestores
             return new GenerarContrasenaResponse { CorreoResponse = cr };
         }
 
+        private void VerificarToken(GenerarContrasena request, Usuario u)
+        {
+            ValidateAndThrow(() => u.Token == request.Token, "Token", "Token no Válido", "");
+        }
 
         private void VerificarContrasena(ActualizarContrasena request,Usuario usuario)
         {
-            ValidateAndThrow(() => ProveedorHash.VerificarHash(request.AntiguaContrasena, usuario.PasswordHash, usuario.Salt),
+            ValidateAndThrow(() => ProveedorHash.VerificarHash(request.ContrasenaActual, usuario.PasswordHash, usuario.Salt),
                 "Usuario", "Usuario / Contraseña inválidos", "");            
         }
                 
@@ -68,6 +74,20 @@ namespace GestionClaves.BL.Gestores
             usuario.PasswordHash = hash;
             usuario.Salt = salt;
         }
-        
+
+        public SolicitarGeneracionContrasenaResponse SolicitarGeneracionContrasena(SolicitarGeneracionContrasena request)
+        {
+            ValidadorGestorUsuarios.ValidarPeticion(request);
+            var usuario = FabricaConexiones.Ejecutar<Usuario>(conexion =>
+            {
+                var u = RepoUsuario.ConsultarPorNombreUsuario(conexion, request.Usuario);
+                ValidadorGestorUsuarios.ValidarActivoConCorreo(u);
+                u.Token = Valores.CrearToken();
+                RepoUsuario.ActualizarToken(conexion, u);
+                return u;
+            });
+            var cr = Correo.EnviarTokenGeneracionContrasena(usuario); //new CorreoResponse(); //
+            return new SolicitarGeneracionContrasenaResponse { MailResponse = cr };
+        }
     }
 }

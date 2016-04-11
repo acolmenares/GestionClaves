@@ -5,8 +5,9 @@ namespace GestionClaves.Modelos.Interfaces
 {
     public interface ICorreo
     {
-        CorreoResponse EnviarNotificacionActualizacionContrasena(Usuario usuario);
-        CorreoResponse EnviarNotificacionGeneracionContrasena(Usuario usuario, string nuevaContrasena);
+        MailResponse EnviarNotificacionActualizacionContrasena(Usuario usuario);
+        MailResponse EnviarNotificacionGeneracionContrasena(Usuario usuario, string nuevaContrasena);
+        MailResponse EnviarTokenGeneracionContrasena(Usuario usuario);
     }
 
     

@@ -11,5 +11,6 @@ namespace GestionClaves.Modelos.Interfaces
     {
         Usuario ConsultarPorNombreUsuario(IConexion conexion,string nombreUsuario);
         int ActualizarContrasena(IConexion conexion, Usuario usuario);
+        int ActualizarToken(IConexion conexion, Usuario u);
     }
 }

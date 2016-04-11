@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace GestionClaves.Modelos.Config
 {
-    public class CorreoResponse
+    public class MailResponse
     {
         public string Id { get; set; }
         public string Message { get; set; }
         public HttpStatusCode StatusCode { get; set; }
         public string StatusDescription { get; set; }
         public string ErrorMessage { get; set; }
-        public CorreoResponseStatus Status { get; set; }
+        public MailResponseStatus Status { get; set; }
     }
 
 
-    public enum CorreoResponseStatus
+    public enum MailResponseStatus
     {
         None = 0,
         Completed = 1,

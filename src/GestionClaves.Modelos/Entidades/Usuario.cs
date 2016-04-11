@@ -27,6 +27,7 @@ namespace GestionClaves.Modelos.Entidades
         public int? IdSucursal { get; set; }
         public bool? Activo { get; set; }
         public string Salt { get; set; }
+        public string Token { get; set; }
 
     }
 }

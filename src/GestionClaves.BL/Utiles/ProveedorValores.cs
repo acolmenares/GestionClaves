@@ -186,5 +186,9 @@ namespace GestionClaves.BL.Utiles
             return new string(chars);
         }
 
+        public string CrearToken()
+        {
+            return Guid.NewGuid().ToString();
+        }
     }
 }

@@ -2,6 +2,7 @@
 using GestionClaves.Modelos.Interfaces;
 using GestionClaves.Modelos.Entidades;
 using GestionClaves.Modelos.Servicio;
+using System;
 
 namespace GestionClaves.BL.Validadores
 {
@@ -9,16 +10,21 @@ namespace GestionClaves.BL.Validadores
     {
 
         public IValidador<ActualizarContrasena> ValidadorActualizarContrasena { get; set; }
+        public IValidador<GenerarContrasena> ValidadorGenerarContrasena { get; set; }
+        public IValidador<SolicitarGeneracionContrasena> ValidadorSolicitarCambio { get; set; }
+
         public IValidador<Usuario> ValidadorActivo { get; set; }
         public IValidador<Usuario> ValidadorActivoConCorreo { get; set; }
-        public IValidador<GenerarContrasena> ValidadorGenerarContrasena { get; set; }
+        
 
         public ValidadorGestorUsuarios()
         {
             ValidadorActualizarContrasena = new ValidadorActualizarContrasena();
-            ValidadorActivo = new ValidadorUsuarioActivo();
-            ValidadorActivoConCorreo = new ValidadorUsuarioActivoConCorreo();
             ValidadorGenerarContrasena = new ValidadorGenerarContrasena();
+            ValidadorSolicitarCambio = new ValidadorSolicitarCambio();
+
+            ValidadorActivo = new ValidadorUsuarioActivo();
+            ValidadorActivoConCorreo = new ValidadorUsuarioActivoConCorreo();   
         }
 
         public void ValidarPeticion(ActualizarContrasena request)
@@ -31,6 +37,11 @@ namespace GestionClaves.BL.Validadores
             ValidadorGenerarContrasena.ValidateAndThrow(request);
         }
 
+        public void ValidarPeticion(SolicitarGeneracionContrasena request)
+        {
+            ValidadorSolicitarCambio.ValidateAndThrow(request);
+        }
+
 
         public void ValidarActivo(Usuario usuario)
         {
@@ -41,10 +52,10 @@ namespace GestionClaves.BL.Validadores
         {
             ValidadorActivoConCorreo.ValidateAndThrow(usuario);
         }
+
+        
     }
-
-    
-
+        
 
     public class ValidadorUsuarioActivo:ValidadorBase<Usuario>,IValidador<Usuario>
     {
@@ -65,6 +76,8 @@ namespace GestionClaves.BL.Validadores
         }
     }
 
+
+
     public class ValidadorActualizarContrasena : ValidadorBase<ActualizarContrasena>, IValidador<ActualizarContrasena>
     {
         public int MinLongitudContrasena { get; set; }
@@ -75,7 +88,7 @@ namespace GestionClaves.BL.Validadores
             MinLongitudContrasena = 12;
             MaxLongitudContrasena = 32;
             RuleFor(f => f.Usuario).NotEmpty().WithErrorCode("").WithMessage("Debe Indicar el Usuario");
-            RuleFor(f => f.AntiguaContrasena).NotEmpty().WithErrorCode("").WithMessage("Debe Indicar la actual contraseña");
+            RuleFor(f => f.ContrasenaActual).NotEmpty().WithErrorCode("").WithMessage("Debe Indicar la actual contraseña");
             RuleFor(f => f.NuevaContrasena).NotEmpty().WithErrorCode("").WithMessage("Debe Indicar la nueva contraseña");
             RuleFor(f => f.NuevaContrasena).Length(MinLongitudContrasena, MaxLongitudContrasena).WithErrorCode("").WithMessage("{0} <= Longitud Contraseña <= {1} ", MinLongitudContrasena, MaxLongitudContrasena);
         }
@@ -86,7 +99,18 @@ namespace GestionClaves.BL.Validadores
         public ValidadorGenerarContrasena()
         {
             RuleFor(f => f.Usuario).NotEmpty().WithErrorCode("").WithMessage("Debe Indicar el Usuario");
+            RuleFor(f => f.Token).NotEmpty().WithErrorCode("").WithMessage("Debe Indicar el Token");
         }
     }
+
+    internal class ValidadorSolicitarCambio : ValidadorBase<SolicitarGeneracionContrasena>, IValidador<SolicitarGeneracionContrasena>
+    {
+        public ValidadorSolicitarCambio()
+        {
+            RuleFor(f => f.Usuario).NotEmpty().WithErrorCode("").WithMessage("Debe Indicar el Usuario");
+            RuleFor(f => f.Captcha).NotEmpty().WithErrorCode("").WithMessage("Debe Indicar el texto Captcha");
+        }
+    }
+
 
 }
