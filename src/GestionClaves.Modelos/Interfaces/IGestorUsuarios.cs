@@ -9,7 +9,7 @@ namespace GestionClaves.Modelos.Interfaces
 {
     public interface IGestorUsuarios
     {
-        ActualizarClaveResponse ActualizarContrasena(ActualizarClave request);
+        ActualizarContrasenaResponse ActualizarContrasena(ActualizarContrasena request);
         GenerarContrasenaResponse GenerarContrasena(GenerarContrasena request);
 
     }

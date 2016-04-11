@@ -2,41 +2,37 @@
 using GestionClaves.Modelos.Entidades;
 using GestionClaves.Modelos.Interfaces;
 using GestionClaves.Modelos.Servicio;
-using ServiceStack.FluentValidation.Results;
-using ServiceStack.FluentValidation;
-using GestionClaves.Modelos.Config;
 
 namespace GestionClaves.BL.Gestores
 
 {
-    public class GestorUsuarios : IGestorUsuarios
+    public class GestorUsuarios : GestorBase, IGestorUsuarios
     {
-        //public IAlmacenUsuarios AlmacenUsuarios { get; set; }
         public IValidadorGestorUsuarios ValidadorGestorUsuarios { get; set; }
         public IProveedorHash ProveedorHash { get; set; }
         public ICorreo Correo { get; set; }
         public IFabricaConexiones FabricaConexiones { get; set; }
         public IRepoUsuario RepoUsuario { get; set; }
+        public IProveedorValores Valores { get; set; }
         public GestorUsuarios()
         {
-            Console.WriteLine("Gestor Usuarios Constructor");
         }
 
-        public ActualizarClaveResponse ActualizarContrasena(ActualizarClave request)
+        public ActualizarContrasenaResponse ActualizarContrasena(ActualizarContrasena request)
         {
             ValidadorGestorUsuarios.ValidarPeticion(request);
             var usuario = FabricaConexiones.Ejecutar<Usuario>(conexion =>
             {
-                var u = RepoUsuario.ConsultarPorLogin(conexion, request.Login);
-                ValidadorGestorUsuarios.ValidarLoginContrasena(u);
-                VerificarContraseña(request, u);
+                var u = RepoUsuario.ConsultarPorNombreUsuario(conexion, request.Usuario);
+                ValidadorGestorUsuarios.ValidarActivo(u);
+                VerificarContrasena(request, u);
                 AsignarContrasena(u, request.NuevaContrasena);
-                RepoUsuario.ActualizarClave(conexion, u);
+                RepoUsuario.ActualizarContrasena(conexion, u);
                 return u;
             });
 
             var cr = Correo.EnviarNotificacionActualizacionContrasena(usuario); //new CorreoResponse(); //  
-            return new ActualizarClaveResponse { CorreoResponse = cr };
+            return new ActualizarContrasenaResponse { CorreoResponse = cr };
         }
 
         public GenerarContrasenaResponse GenerarContrasena(GenerarContrasena request)
@@ -44,79 +40,34 @@ namespace GestionClaves.BL.Gestores
             ValidadorGestorUsuarios.ValidarPeticion(request);
             var nuevaContrasena = string.Empty;
             var usuario = FabricaConexiones.Ejecutar<Usuario>(conexion =>
-             {
-                 var u = RepoUsuario.ConsultarPorLogin(conexion, request.Login);
-                 ValidadorGestorUsuarios.ValidarLogin(u);
-                 nuevaContrasena = CreateRandomPassword();
-                 AsignarContrasena(u, nuevaContrasena);
-                 RepoUsuario.ActualizarClave(conexion, u);
-                 return u;
-             });
+            {
+                var u = RepoUsuario.ConsultarPorNombreUsuario(conexion, request.Usuario);
+                ValidadorGestorUsuarios.ValidarActivoConCorreo(u);
+                nuevaContrasena = Valores.CrearContrasenaAleatoria();
+                AsignarContrasena(u, nuevaContrasena);
+                RepoUsuario.ActualizarContrasena(conexion, u);
+                return u;
+            });
             var cr = Correo.EnviarNotificacionGeneracionContrasena(usuario, nuevaContrasena); //new CorreoResponse(); //
             return new GenerarContrasenaResponse { CorreoResponse = cr };
         }
 
-        private void VerificarContraseña(ActualizarClave request,Usuario usuario)
-        {
-            if (!ProveedorHash.VerificarHash(request.AntiguaContrasena, usuario.Contrasena))
-            {
-                var result = new ValidationResult(new[] { new ValidationFailure("Usuario", "Usuario / Contraseña inválidos", "") });
-                throw new ValidationException(result.Errors);
-            }
-        }
 
+        private void VerificarContrasena(ActualizarContrasena request,Usuario usuario)
+        {
+            ValidateAndThrow(() => ProveedorHash.VerificarHash(request.AntiguaContrasena, usuario.PasswordHash, usuario.Salt),
+                "Usuario", "Usuario / Contraseña inválidos", "");            
+        }
+                
 
         private void AsignarContrasena(Usuario usuario, string nuevaContrasena)
         {
             string hash;
             string salt;
             ProveedorHash.ObtenerHash(nuevaContrasena, out hash, out salt);
-            usuario.Contrasena = hash;
+            usuario.PasswordHash = hash;
+            usuario.Salt = salt;
         }
-
-        private static string CreateRandomPassword(int passwordLength = 12)
-        {
-            const string allowedChars = "abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789!@$?";
-            Byte[] randomBytes = new Byte[passwordLength];
-            char[] chars = new char[passwordLength];
-            int allowedCharCount = allowedChars.Length;
-
-            for (int i = 0; i < passwordLength; i++)
-            {
-                var randomObj = new Random();
-                randomObj.NextBytes(randomBytes);
-                chars[i] = allowedChars[(int)randomBytes[i] % allowedCharCount];
-            }
-
-            return new string(chars);
-        }       
-
-        /*
-        public ActualizarClaveResponse ActualizarContrasenax(ActualizarClave request)
-        {
-            ValidadorGestorUsuarios.ValidarPeticion(request);
-            var usuario = AlmacenUsuarios.ConsultarPorLogin(request.Login);
-            ValidadorGestorUsuarios.ValidarLoginContrasena(usuario);
-            VerificarContraseña(request, usuario);
-            AsignarContrasena(usuario, request.NuevaContrasena);
-            AlmacenUsuarios.ActualizarClave(usuario);
-            var cr = Correo.EnviarNotificacionActualizacionContrasena(usuario);
-            return new ActualizarClaveResponse { CorreoResponse = cr };
-        }*/
-
-        /*
-        public GenerarContrasenaResponse GenerarContrasena(GenerarContrasena request)
-        {
-            ValidadorGestorUsuarios.ValidarPeticion(request);
-            var usuario = AlmacenUsuarios.ConsultarPorLogin(request.Login);
-            ValidadorGestorUsuarios.ValidarLogin(usuario);
-            var nuevaContrasena = CreateRandomPassword();
-            AsignarContrasena(usuario, nuevaContrasena);
-            AlmacenUsuarios.ActualizarClave(usuario);
-            var cr = Correo.EnviarNotificacionGeneracionContrasena(usuario, nuevaContrasena);
-            return new GenerarContrasenaResponse { CorreoResponse = cr };
-        }
-        */
-
+        
     }
 }

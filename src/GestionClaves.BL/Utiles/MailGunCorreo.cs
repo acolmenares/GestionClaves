@@ -27,7 +27,7 @@ namespace GestionClaves.BL.Utiles
                                  Config.Domain, ParameterType.UrlSegment);
             request.Resource = "{domain}/messages";
             request.AddParameter("from", Config.From);
-            request.AddParameter("to", usuario.Correo);
+            request.AddParameter("to", usuario.Email);
             request.AddParameter("subject", "Contraseña Generada");
             request.AddParameter("text", nuevaContrasena);
             request.Method = Method.POST;
@@ -50,7 +50,7 @@ namespace GestionClaves.BL.Utiles
                                  Config.Domain, ParameterType.UrlSegment);
             request.Resource = "{domain}/messages";
             request.AddParameter("from", Config.From);
-            request.AddParameter("to", usuario.Correo);
+            request.AddParameter("to", usuario.Email);
             request.AddParameter("subject", "Contraseña Actualizada");
             request.AddParameter("text", "Su contraseña ha sido actualizada");
             request.Method = Method.POST;

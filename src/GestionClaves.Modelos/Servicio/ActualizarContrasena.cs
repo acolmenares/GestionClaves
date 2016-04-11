@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace GestionClaves.Modelos.Servicio
 {
-    public class ActualizarClave
+    public class ActualizarContrasena:IReturn<ActualizarContrasenaResponse>
     {
-        public string Login { get; set; }
+        public string Usuario { get; set; }
         public string AntiguaContrasena { get; set; }
         public string NuevaContrasena { get; set; }
     }
 
-    public class ActualizarClaveResponse : IHasResponseStatus
+    public class ActualizarContrasenaResponse : IHasResponseStatus
     {
         public CorreoResponse CorreoResponse { get; set; }
         public ResponseStatus ResponseStatus { get; set; }

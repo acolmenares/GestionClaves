@@ -20,7 +20,7 @@ namespace GestionClaves.DAL
         public Usuario ConsultarPorLogin(string login)
         {
             Expression<Func<Usuario, bool>> predicate =
-                (q => q.Login == login );
+                (q => q.UserName == login );
 
             return ConsultarUsuario(predicate);
         }
@@ -31,7 +31,7 @@ namespace GestionClaves.DAL
            
             using (var con = DbConnectionFactory.Open())
             {
-                var updateOnly = con.From<Usuario>().Where(q => q.Id == usuario.Id).Update(q => q.Contrasena);
+                var updateOnly = con.From<Usuario>().Where(q => q.Id == usuario.Id).Update(q => q.PasswordHash);
                 return Actualizar(usuario, updateOnly);
             }
         }
@@ -47,8 +47,8 @@ namespace GestionClaves.DAL
         {
             if (usuario != default(Usuario))
             {
-                if (!string.IsNullOrEmpty(usuario.Correo)) usuario.Correo = usuario.Correo.Trim();
-                if (!string.IsNullOrEmpty(usuario.Login)) usuario.Login = usuario.Login.Trim();
+                if (!string.IsNullOrEmpty(usuario.Email)) usuario.Email = usuario.Email.Trim();
+                if (!string.IsNullOrEmpty(usuario.UserName)) usuario.UserName = usuario.UserName.Trim();
                 if (!string.IsNullOrEmpty(usuario.NombreCompleto)) usuario.NombreCompleto = usuario.NombreCompleto.Trim();
 
             }

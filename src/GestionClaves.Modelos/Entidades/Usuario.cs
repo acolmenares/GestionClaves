@@ -13,16 +13,20 @@ namespace GestionClaves.Modelos.Entidades
     public class Usuario: IEntidad
     {
         public int Id { get; set; }
-        public string Login { get; set; }
-        public string Contrasena { get; set; }
+        [Alias("Login")]
+        public string UserName { get; set; }
+        [Alias("Contrasena")]
+        public string PasswordHash { get; set; }
         [Alias("Nombre_Completo")]
         public string NombreCompleto { get; set; }
-        public string Correo { get; set; }
+        [Alias("Correo")]
+        public string Email { get; set; }
         [Alias("Id_Perfil")]
         public int? IdPerfil { get; set; }
         [Alias("Id_Sucursal")]
         public int? IdSucursal { get; set; }
         public bool? Activo { get; set; }
+        public string Salt { get; set; }
 
     }
 }

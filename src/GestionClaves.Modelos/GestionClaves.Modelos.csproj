@@ -53,9 +53,10 @@
     <Compile Include="Interfaces\IEntidad.cs" />
     <Compile Include="Interfaces\IFabricaConexiones.cs" />
     <Compile Include="Interfaces\IProveedorHash.cs" />
+    <Compile Include="Interfaces\IProveedorValores.cs" />
     <Compile Include="Interfaces\IRepo.cs" />
     <Compile Include="Interfaces\IRepoUsuario.cs" />
-    <Compile Include="Servicio\ActualizarClave.cs" />
+    <Compile Include="Servicio\ActualizarContrasena.cs" />
     <Compile Include="Excepciones\ExcepcionRN.cs" />
     <Compile Include="Interfaces\IAlmacenUsuarios.cs" />
     <Compile Include="Interfaces\IGestorUsuarios.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Interfaces\IValidadorLoginContrasena.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entidades\Usuario.cs" />
+    <Compile Include="Servicio\GenerarCaptcha.cs" />
     <Compile Include="Servicio\GenerarContrasena.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

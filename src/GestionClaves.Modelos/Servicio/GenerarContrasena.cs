@@ -10,7 +10,7 @@ namespace GestionClaves.Modelos.Servicio
 {
     public class GenerarContrasena:IReturn<GenerarContrasenaResponse>
     {
-        public string Login { get; set; }
+        public string Usuario { get; set; }
     }
 
 

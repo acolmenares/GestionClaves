@@ -12,15 +12,15 @@ namespace GestionClaves.DAL
 {
     public class RepoUsuario : Repo<Usuario>, IRepoUsuario
     {
-        public int ActualizarClave(IConexion conexion, Usuario usuario)
+        public int ActualizarContrasena(IConexion conexion, Usuario usuario)
         {
-            return  Actualizar( conexion,usuario, q => q.Contrasena, q => q.Id == usuario.Id);
+            return Actualizar(conexion, usuario,  q => new { q.PasswordHash, q.Salt }, q => q.Id == usuario.Id);
         }
                
 
-        public Usuario ConsultarPorLogin(IConexion conexion, string login)
+        public Usuario ConsultarPorNombreUsuario(IConexion conexion, string nombreUsuario)
         {
-            return ConsultarUsuario(conexion, q => q.Login == login);
+            return ConsultarUsuario(conexion, q => q.UserName == nombreUsuario);
         }
 
 
@@ -34,8 +34,8 @@ namespace GestionClaves.DAL
         {
             if (usuario != default(Usuario))
             {
-                if (!string.IsNullOrEmpty(usuario.Correo)) usuario.Correo = usuario.Correo.Trim();
-                if (!string.IsNullOrEmpty(usuario.Login)) usuario.Login = usuario.Login.Trim();
+                if (!string.IsNullOrEmpty(usuario.Email)) usuario.Email = usuario.Email.Trim();
+                if (!string.IsNullOrEmpty(usuario.UserName)) usuario.UserName = usuario.UserName.Trim();
                 if (!string.IsNullOrEmpty(usuario.NombreCompleto)) usuario.NombreCompleto = usuario.NombreCompleto.Trim();
 
             }

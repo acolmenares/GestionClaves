@@ -32,6 +32,7 @@ namespace GestionClaves.WebHost
             });
                         
             Plugins.Add(new CorsFeature());
+            Plugins.Add(new SessionFeature()); // TODO : PONER REDIS AQUI!
 
             var appSettings = new AppSettings();
 
@@ -42,33 +43,30 @@ namespace GestionClaves.WebHost
                 ConnectionFilter = x => new ProfiledDbConnection(x, Profiler.Current)
             };
 
-            //var almacenUsuario = new AlmacenUsuarios(dbfactory);
             var fabricaConexiones = new FabricaConexiones(dbfactory);
             var repoUsuario = new RepoUsuario();
             var validadorUsuarios = new ValidadorGestorUsuarios();
             var proveedorHash = new ProveedorHash();
+            var valores = new ProveedorValores();
 
             var varMgConfig = appSettings.Get("MailGunConfig", Environment.GetEnvironmentVariable("APP_MAILGUNCONFIG"));
-            var mgConfig =
-                TypeSerializer.DeserializeFromString<MailGunConfig>(varMgConfig);
+            var mgConfig = TypeSerializer.DeserializeFromString<MailGunConfig>(varMgConfig);
                                    
             
             var correo = new MailGunCorreo() { Config = mgConfig };
             var gestorUsuarios = new GestorUsuarios
             {
-                //AlmacenUsuarios = almacenUsuario,
                 FabricaConexiones = fabricaConexiones,
                 ValidadorGestorUsuarios = validadorUsuarios,
                 ProveedorHash= proveedorHash,
                 Correo=correo,
                 RepoUsuario= repoUsuario,
-                
-                
+                Valores= valores,
             };
 
             container.Register<IGestorUsuarios>(gestorUsuarios);
-
+            container.Register<IProveedorValores>(valores);
 
         }
     }
-}
+}//src="data:image/png;base64,

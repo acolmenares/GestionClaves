@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="ServicioBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServicioCaptcha.cs" />
     <Compile Include="ServicioUsuario.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -14,10 +14,9 @@ namespace GestionClaves.Servicio
     {
         public IGestorUsuarios GestorUsuarios { get; set; }
 
-        public ActualizarClaveResponse Post(ActualizarClave request)
+        public ActualizarContrasenaResponse Post(ActualizarContrasena request)
         {
             return GestorUsuarios.ActualizarContrasena(request);
-            
         }
 
         public GenerarContrasenaResponse Post(GenerarContrasena request)

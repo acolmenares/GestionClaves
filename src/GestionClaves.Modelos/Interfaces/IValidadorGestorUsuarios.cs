@@ -13,11 +13,11 @@ namespace GestionClaves.Modelos.Interfaces
         //IValidador<ActualizarClave> ValidadorActualizarClave { get; set; }
         //IValidador<Usuario> ValidadorLoginContrasena { get; set; }
         
-        void ValidarPeticion(ActualizarClave request);
+        void ValidarPeticion(ActualizarContrasena request);
         void ValidarPeticion(GenerarContrasena request);
 
-        void ValidarLoginContrasena(Usuario usuario);
-        void ValidarLogin(Usuario usuario);
+        void ValidarActivo(Usuario usuario);
+        void ValidarActivoConCorreo(Usuario usuario);
 
 
     }
