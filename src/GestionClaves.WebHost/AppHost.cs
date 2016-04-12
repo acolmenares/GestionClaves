@@ -1,9 +1,6 @@
 ﻿using ServiceStack;
 using ServiceStack.Text;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using Funq;
 using GestionClaves.Servicio;
 using ServiceStack.Configuration;
@@ -12,6 +9,7 @@ using GestionClaves.DAL;
 using GestionClaves.BL.Validadores;
 using GestionClaves.BL.Gestores;
 using GestionClaves.Modelos.Interfaces;
+using GestionClaves.Modelos.Servicio;
 using GestionClaves.BL.Utiles;
 using GestionClaves.Modelos.Config;
 using ServiceStack.MiniProfiler.Data;
@@ -34,6 +32,8 @@ namespace GestionClaves.WebHost
             Plugins.Add(new CorsFeature());
             Plugins.Add(new SessionFeature()); // TODO : PONER REDIS AQUI!
 
+            //Routes.Add<SolicitarGeneracionContrasena>("/contrasena/solicitargeneracion");
+            //Routes.Add<GenerarCaptcha>("/contrasena/generarcaptcha");
             var appSettings = new AppSettings();
 
             var conexionBDSeguridad = appSettings.Get("ConexionBDSegurida", Environment.GetEnvironmentVariable("APP_CONEXION_IRD_SEGURIDAD"));
