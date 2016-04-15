@@ -21,7 +21,7 @@ namespace GestionClaves.DAL
 
         public int ActualizarToken(IConexion conexion, Usuario usuario)
         {
-            return Actualizar(conexion, usuario, q => q.Id == usuario.Id, q => new {  q.Token });
+            return Actualizar(conexion, usuario, q => q.Id == usuario.Id, q =>  q.Token );
         }
 
         private Usuario ConsultarUsuario(IConexion conexion, Expression<Func<Usuario, bool>> predicate)
