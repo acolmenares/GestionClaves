@@ -64,7 +64,7 @@ namespace GestionClaves.DAL
             return c;
         }
 
-        public int Actualizar<T, TKey>(T data, Expression<Func<T, bool>> predicate)
+        public int Actualizar<T>(T data, Expression<Func<T, bool>> predicate)
         {
             int c = 0;
             Execute(con => {

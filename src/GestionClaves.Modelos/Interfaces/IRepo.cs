@@ -14,7 +14,7 @@ namespace GestionClaves.Modelos.Interfaces
         T ConsultarSimple(IConexion conexion, Expression<Func<T, bool>> predicate);
         T ConsultarPorId(IConexion conexion, int id);
         int Actualizar<TKey>(IConexion conexion, T data, Expression<Func<T, bool>> predicate, Expression<Func<T, TKey>> onlyFields);
-        int Actualizar<TKey>(IConexion conexion, T data, Expression<Func<T, bool>> predicate);
+        int Actualizar(IConexion conexion, T data, Expression<Func<T, bool>> predicate);
         int Actualizar(IConexion conexion, T data);
         void Crear(IConexion conexion, T data) ;
         int Borrar(IConexion conexion, int id);

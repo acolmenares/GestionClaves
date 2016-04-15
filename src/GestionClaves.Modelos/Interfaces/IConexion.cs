@@ -14,7 +14,7 @@ namespace GestionClaves.Modelos.Interfaces
         T ConsultarSimple<T>(Expression<Func<T, bool>> predicate);
         T ConsultarPorId<T>(int id) where T : IHasIntId;
         int Actualizar<T, TKey>(T data, Expression<Func<T, bool>> predicate, Expression<Func<T, TKey>> onlyFields);
-        int Actualizar<T, TKey>(T data, Expression<Func<T, bool>> predicate);
+        int Actualizar<T>(T data, Expression<Func<T, bool>> predicate);
         int Actualizar<T>(T data) where T : IHasIntId;
         void Crear<T>(T data) where T : IEntidad;
         int Borrar<T>(int id) where T : IHasIntId;
