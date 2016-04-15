@@ -9,7 +9,7 @@ namespace GestionClaves.DAL
     {
         public int ActualizarContrasena(IConexion conexion, Usuario usuario)
         {
-            return Actualizar(conexion, usuario,  q => new { q.PasswordHash, q.Salt, q.Token }, q => q.Id == usuario.Id);
+            return Actualizar(conexion, usuario, q => q.Id == usuario.Id,   q => new { q.PasswordHash, q.Salt, q.Token });
         }
                
 
@@ -21,7 +21,7 @@ namespace GestionClaves.DAL
 
         public int ActualizarToken(IConexion conexion, Usuario usuario)
         {
-            return Actualizar(conexion, usuario, q => new {  q.Token }, q => q.Id == usuario.Id);
+            return Actualizar(conexion, usuario, q => q.Id == usuario.Id, q => new {  q.Token });
         }
 
         private Usuario ConsultarUsuario(IConexion conexion, Expression<Func<Usuario, bool>> predicate)

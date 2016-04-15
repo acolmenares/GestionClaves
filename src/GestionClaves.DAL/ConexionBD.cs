@@ -53,7 +53,7 @@ namespace GestionClaves.DAL
             return r;
         }
 
-        public int Actualizar<T, TKey>(T data, Expression<Func<T, TKey>> onlyFields, Expression<Func<T, bool>> predicate)
+        public int Actualizar<T, TKey>(T data, Expression<Func<T, bool>> predicate, Expression<Func<T, TKey>> onlyFields)
         {
             int c = 0;
             Execute(con => {
@@ -63,6 +63,18 @@ namespace GestionClaves.DAL
 
             return c;
         }
+
+        public int Actualizar<T, TKey>(T data, Expression<Func<T, bool>> predicate)
+        {
+            int c = 0;
+            Execute(con => {
+                var updateOnly = con.From<T>().Where(predicate);
+                c = con.UpdateOnly<T>(data, updateOnly);
+            });
+
+            return c;
+        }
+
 
         public int Borrar<T>(int id) where T : IHasIntId
         {
@@ -127,5 +139,6 @@ namespace GestionClaves.DAL
             return acciones(conexion);
         }
 
+        
     }
 }

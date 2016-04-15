@@ -12,9 +12,14 @@ namespace GestionClaves.DAL
             return conexion.Actualizar(data);
         }
 
-        public int Actualizar<TKey>(IConexion conexion, T data, System.Linq.Expressions.Expression<Func<T, TKey>> onlyFields, System.Linq.Expressions.Expression<Func<T, bool>> predicate)
+        public int Actualizar<TKey>(IConexion conexion, T data, System.Linq.Expressions.Expression<Func<T, bool>> predicate, System.Linq.Expressions.Expression<Func<T, TKey>> onlyFields)
         {
-            return conexion.Actualizar<T, TKey>(data, onlyFields, predicate);
+            return conexion.Actualizar<T, TKey>(data, predicate, onlyFields);
+        }
+
+        public int Actualizar<TKey>(IConexion conexion, T data, System.Linq.Expressions.Expression<Func<T, bool>> predicate)
+        {
+            return conexion.Actualizar<T, TKey>(data, predicate);
         }
 
         public int Borrar(IConexion conexion, int id)
