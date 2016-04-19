@@ -10,8 +10,13 @@ namespace GestionClaves.Modelos.Servicio
     public class GenerarCaptcha : IReturn<GenerarCaptchaResponse>
     { }
 
-    public class GenerarCaptchaResponse
+    public class GenerarCaptchaResponse:IHasResponseStatus
     {
+        public ResponseStatus ResponseStatus
+        {
+            get; set;
+        }
+
         public string TextoBase64 { get; set; }
     }
 

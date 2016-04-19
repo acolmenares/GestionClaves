@@ -25,10 +25,10 @@ namespace GestionClaves.BL.Utiles
         {
             LongContrasena = 12;
             LongTextoCaptcha = 6;
-            AnchoImgCaptcha = 300;
-            AltoImgCaptcha = 150;
+            AnchoImgCaptcha = 200;
+            AltoImgCaptcha = 100;
             FontFamilyNameImgCaptcha = "Taoma";
-            FontSizeImgCaptcha = 30;
+            FontSizeImgCaptcha = 25;
             CaracteresContrasena= "abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789!@$?";
             CaracteresCaptcha = "abcdefghkmnpqrstuvwxyzABCDEFGHKLMNPQRSTUVWXYZ23456789@?+*";
         }
@@ -147,28 +147,17 @@ namespace GestionClaves.BL.Utiles
                 //add question 
 
                 gfx.DrawString(txt, new Font(fontFamilyName, fontSize), Brushes.Gray,
-                    rand.Next(0, width / 10), rand.Next(2, height / 2));//5-55
+                    rand.Next(0, width / 25), rand.Next(2, height / 2));//5-55
             }
-
-            bmp.Save(txt);
+            /*try
+            {
+                bmp.Save(txt + ".png");
+            }
+            catch (Exception) {
+            }*/
             return bmp;
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //
-
+        
 
         private string CrearCadenaAleatoria(string permitidos, int longitud)
         {            

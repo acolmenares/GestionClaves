@@ -14,6 +14,7 @@ using GestionClaves.BL.Utiles;
 using GestionClaves.Modelos.Config;
 using ServiceStack.MiniProfiler.Data;
 using ServiceStack.MiniProfiler;
+using System.Net.Mime;
 
 namespace GestionClaves.WebHost
 {
@@ -27,8 +28,16 @@ namespace GestionClaves.WebHost
             {
                 DebugMode = true,
                 HandlerFactoryPath = "gc-api",
+                GlobalResponseHeaders =
+                    {
+                        { "Access-Control-Allow-Origin", "*" },
+                        { "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, PATCH" },
+                    },
+                DefaultContentType = "json"
             });
-                        
+
+            
+
             Plugins.Add(new CorsFeature());
             Plugins.Add(new SessionFeature()); // TODO : PONER REDIS AQUI!
 
