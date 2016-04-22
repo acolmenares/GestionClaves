@@ -65,8 +65,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entidades\Usuario.cs" />
     <Compile Include="Servicio\GenerarCaptcha.cs" />
-    <Compile Include="Servicio\GenerarContrasena.cs" />
-    <Compile Include="Servicio\SolicitarCambioContrasena.cs" />
+    <Compile Include="Servicio\ConfirmarContrasena.cs" />
+    <Compile Include="Servicio\SolicitarContrasena.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

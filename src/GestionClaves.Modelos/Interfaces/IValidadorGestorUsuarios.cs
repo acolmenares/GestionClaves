@@ -14,10 +14,10 @@ namespace GestionClaves.Modelos.Interfaces
         //IValidador<Usuario> ValidadorLoginContrasena { get; set; }
         
         void ValidarPeticion(ActualizarContrasena request);
-        void ValidarPeticion(GenerarContrasena request);
+        void ValidarPeticion(ConfirmarContrasena request);
 
         void ValidarActivo(Usuario usuario);
         void ValidarActivoConCorreo(Usuario usuario);
-        void ValidarPeticion(SolicitarGeneracionContrasena request);
+        void ValidarPeticion(SolicitarContrasena request);
     }
 }

@@ -11,8 +11,12 @@ namespace GestionClaves.Servicio
         {
             Captcha = Valores.CrearTextoCaptcha();
             var sig64 = Valores.GenerarBase64Captcha(Captcha);
-            return new GenerarCaptchaResponse { TextoBase64 = sig64 };
-            
+            return new GenerarCaptchaResponse { TextoBase64 = sig64 };    
+        }
+
+        public GenerarCaptchaResponse Post(GenerarCaptcha request)
+        {
+            return Get(request);
         }
     }
 }

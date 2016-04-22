@@ -10,8 +10,8 @@ namespace GestionClaves.BL.Validadores
     {
 
         public IValidador<ActualizarContrasena> ValidadorActualizarContrasena { get; set; }
-        public IValidador<GenerarContrasena> ValidadorGenerarContrasena { get; set; }
-        public IValidador<SolicitarGeneracionContrasena> ValidadorSolicitarCambio { get; set; }
+        public IValidador<ConfirmarContrasena> ValidadorGenerarContrasena { get; set; }
+        public IValidador<SolicitarContrasena> ValidadorSolicitarCambio { get; set; }
 
         public IValidador<Usuario> ValidadorActivo { get; set; }
         public IValidador<Usuario> ValidadorActivoConCorreo { get; set; }
@@ -32,12 +32,12 @@ namespace GestionClaves.BL.Validadores
             ValidadorActualizarContrasena.ValidateAndThrow(request);
         }
 
-        public void ValidarPeticion(GenerarContrasena request)
+        public void ValidarPeticion(ConfirmarContrasena request)
         {
             ValidadorGenerarContrasena.ValidateAndThrow(request);
         }
 
-        public void ValidarPeticion(SolicitarGeneracionContrasena request)
+        public void ValidarPeticion(SolicitarContrasena request)
         {
             ValidadorSolicitarCambio.ValidateAndThrow(request);
         }
@@ -94,7 +94,7 @@ namespace GestionClaves.BL.Validadores
         }
     }
 
-    public class ValidadorGenerarContrasena : ValidadorBase<GenerarContrasena>, IValidador<GenerarContrasena>
+    public class ValidadorGenerarContrasena : ValidadorBase<ConfirmarContrasena>, IValidador<ConfirmarContrasena>
     {
         public ValidadorGenerarContrasena()
         {
@@ -103,7 +103,7 @@ namespace GestionClaves.BL.Validadores
         }
     }
 
-    internal class ValidadorSolicitarCambio : ValidadorBase<SolicitarGeneracionContrasena>, IValidador<SolicitarGeneracionContrasena>
+    internal class ValidadorSolicitarCambio : ValidadorBase<SolicitarContrasena>, IValidador<SolicitarContrasena>
     {
         public ValidadorSolicitarCambio()
         {

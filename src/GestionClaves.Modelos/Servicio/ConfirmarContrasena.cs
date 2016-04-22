@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace GestionClaves.Modelos.Servicio
 {
-    public class GenerarContrasena:IReturn<GenerarContrasenaResponse>
+    public class ConfirmarContrasena:IReturn<ConfirmarContrasenaResponse>
     {
         public string Usuario { get; set; }
         public string Token { get; set; }
     }
 
 
-    public class GenerarContrasenaResponse : IHasResponseStatus
+    public class ConfirmarContrasenaResponse : IHasResponseStatus
     {
         public MailResponse CorreoResponse { get; set; }
         public ResponseStatus ResponseStatus { get; set; }

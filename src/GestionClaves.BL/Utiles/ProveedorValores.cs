@@ -2,6 +2,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.IO;
 
@@ -26,7 +27,7 @@ namespace GestionClaves.BL.Utiles
             LongContrasena = 12;
             LongTextoCaptcha = 6;
             AnchoImgCaptcha = 200;
-            AltoImgCaptcha = 100;
+            AltoImgCaptcha = 50;
             FontFamilyNameImgCaptcha = "Taoma";
             FontSizeImgCaptcha = 25;
             CaracteresContrasena= "abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789!@$?";
@@ -52,12 +53,32 @@ namespace GestionClaves.BL.Utiles
             var sigBase64 = string.Empty;
             using (MemoryStream ms = new MemoryStream())
             {
-                bImage.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                ImageCodecInfo jpgEncoder = GetEncoder(System.Drawing.Imaging.ImageFormat.Jpeg);
+                System.Drawing.Imaging.Encoder myEncoder = System.Drawing.Imaging.Encoder.Quality;
+                var myEncoderParameter = new EncoderParameter(myEncoder, 50L);
+                EncoderParameters myEncoderParameters = new EncoderParameters(1);
+                myEncoderParameters.Param[0] = myEncoderParameter;
+                bImage.Save(ms, jpgEncoder, myEncoderParameters);
                 byte[] byteImage = ms.ToArray();
 
                 sigBase64 = Convert.ToBase64String(byteImage); //Get Base64
             }
-            return sigBase64;
+            return string.Format("data:image/jpeg;base64,{0}", sigBase64);
+        }
+
+        private ImageCodecInfo GetEncoder(ImageFormat format)
+        {
+
+            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
+
+            foreach (ImageCodecInfo codec in codecs)
+            {
+                if (codec.FormatID == format.Guid)
+                {
+                    return codec;
+                }
+            }
+            return null;
         }
 
 
@@ -147,7 +168,7 @@ namespace GestionClaves.BL.Utiles
                 //add question 
 
                 gfx.DrawString(txt, new Font(fontFamilyName, fontSize), Brushes.Gray,
-                    rand.Next(0, width / 25), rand.Next(2, height / 2));//5-55
+                    rand.Next(0, width / 50), rand.Next(2, height / 10));//5-55
             }
             /*try
             {
@@ -155,6 +176,7 @@ namespace GestionClaves.BL.Utiles
             }
             catch (Exception) {
             }*/
+                        
             return bmp;
         }
         

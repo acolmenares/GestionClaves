@@ -3,13 +3,13 @@ using ServiceStack;
 
 namespace GestionClaves.Modelos.Servicio
 {
-    public class SolicitarGeneracionContrasena:IReturn<SolicitarGeneracionContrasenaResponse>
+    public class SolicitarContrasena:IReturn<SolicitarContrasenaResponse>
     {
         public string Usuario { get; set; }
         public string Captcha { get; set; }
     }
 
-    public class SolicitarGeneracionContrasenaResponse :IHasResponseStatus
+    public class SolicitarContrasenaResponse :IHasResponseStatus
     {
         public MailResponse MailResponse { get; set; }
 

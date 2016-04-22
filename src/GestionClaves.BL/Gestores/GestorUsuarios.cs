@@ -35,7 +35,7 @@ namespace GestionClaves.BL.Gestores
             return new ActualizarContrasenaResponse { CorreoResponse = cr };
         }
 
-        public GenerarContrasenaResponse GenerarContrasena(GenerarContrasena request)
+        public ConfirmarContrasenaResponse GenerarContrasena(ConfirmarContrasena request)
         {
             ValidadorGestorUsuarios.ValidarPeticion(request);
             var nuevaContrasena = string.Empty;
@@ -51,10 +51,10 @@ namespace GestionClaves.BL.Gestores
                 return u;
             });
             var cr = Correo.EnviarNotificacionGeneracionContrasena(usuario, nuevaContrasena); //new CorreoResponse(); //
-            return new GenerarContrasenaResponse { CorreoResponse = cr };
+            return new ConfirmarContrasenaResponse { CorreoResponse = cr };
         }
 
-        private void VerificarToken(GenerarContrasena request, Usuario u)
+        private void VerificarToken(ConfirmarContrasena request, Usuario u)
         {
             ValidateAndThrow(() => u.Token == request.Token, "Token", "Token no Válido", "");
         }
@@ -75,7 +75,7 @@ namespace GestionClaves.BL.Gestores
             usuario.Salt = salt;
         }
 
-        public SolicitarGeneracionContrasenaResponse SolicitarGeneracionContrasena(SolicitarGeneracionContrasena request)
+        public SolicitarContrasenaResponse SolicitarGeneracionContrasena(SolicitarContrasena request)
         {
             ValidadorGestorUsuarios.ValidarPeticion(request);
             var usuario = FabricaConexiones.Ejecutar<Usuario>(conexion =>
@@ -87,7 +87,7 @@ namespace GestionClaves.BL.Gestores
                 return u;
             });
             var cr = Correo.EnviarTokenGeneracionContrasena(usuario); //new CorreoResponse(); //
-            return new SolicitarGeneracionContrasenaResponse { MailResponse = cr };
+            return new SolicitarContrasenaResponse { MailResponse = cr };
         }
     }
 }
