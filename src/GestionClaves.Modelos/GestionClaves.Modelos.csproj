@@ -52,6 +52,7 @@
     <Compile Include="Interfaces\ICorreo.cs" />
     <Compile Include="Interfaces\IEntidad.cs" />
     <Compile Include="Interfaces\IFabricaConexiones.cs" />
+    <Compile Include="Interfaces\IHasCaptcha.cs" />
     <Compile Include="Interfaces\IProveedorHash.cs" />
     <Compile Include="Interfaces\IProveedorValores.cs" />
     <Compile Include="Interfaces\IRepo.cs" />
