@@ -18,6 +18,11 @@ namespace GestionClaves.DAL
             return ConsultarUsuario(conexion, q => q.UserName == nombreUsuario);
         }
 
+        public Usuario ConsultarPorCorreo(IConexion conexion, string correo)
+        {
+            return ConsultarUsuario(conexion, q => q.Email == correo);
+        }
+
 
         public int ActualizarToken(IConexion conexion, Usuario usuario)
         {

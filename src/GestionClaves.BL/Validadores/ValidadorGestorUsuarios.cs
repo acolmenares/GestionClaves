@@ -61,7 +61,7 @@ namespace GestionClaves.BL.Validadores
     {
         public ValidadorUsuarioActivo()
         {
-            MensajeCuandoInstanciaEsNull = "Usuario / Contraseña inválidos";
+            MensajeCuandoInstanciaEsNull = "Usuario/Contraseña inválidos";
             RuleFor(f => f.Activo).Cascade(CascadeMode.StopOnFirstFailure).NotNull().Must(v => v.Value==true).WithErrorCode("").WithMessage("Usuario Inactivo");  
         }                   
     }
@@ -70,7 +70,7 @@ namespace GestionClaves.BL.Validadores
     {
         public ValidadorUsuarioActivoConCorreo()
         {
-            MensajeCuandoInstanciaEsNull = "Usuario No Existe";
+            MensajeCuandoInstanciaEsNull = "Correo No Registrado";
             RuleFor(f => f.Activo).Cascade(CascadeMode.StopOnFirstFailure).NotNull().Must(v => v.Value == true).WithErrorCode("").WithMessage("Usuario Inactivo");
             RuleFor(f => f.Email).Cascade(CascadeMode.StopOnFirstFailure).NotNull().NotEmpty().EmailAddress().WithErrorCode("").WithMessage("Correo No Válido: '{0}'", f => f.Email);
         }
@@ -85,7 +85,7 @@ namespace GestionClaves.BL.Validadores
 
         public ValidadorActualizarContrasena()
         {
-            MinLongitudContrasena = 12;
+            MinLongitudContrasena = 10;
             MaxLongitudContrasena = 32;
             RuleFor(f => f.Usuario).NotEmpty().WithErrorCode("").WithMessage("Debe Indicar el Usuario");
             RuleFor(f => f.ContrasenaActual).NotEmpty().WithErrorCode("").WithMessage("Debe Indicar la actual contraseña");
@@ -98,8 +98,9 @@ namespace GestionClaves.BL.Validadores
     {
         public ValidadorGenerarContrasena()
         {
-            RuleFor(f => f.Usuario).NotEmpty().WithErrorCode("").WithMessage("Debe Indicar el Usuario");
-            RuleFor(f => f.Token).NotEmpty().WithErrorCode("").WithMessage("Debe Indicar el Token");
+            RuleFor(f => f.Correo).Cascade(CascadeMode.StopOnFirstFailure).NotNull().NotEmpty().EmailAddress().WithErrorCode("").WithMessage("Correo No Válido: '{0}'", f => f.Correo);
+            RuleFor(f => f.Token).NotEmpty().WithErrorCode("").WithMessage("Debe Indicar el Código de Confirmación");
+            RuleFor(f => f.Captcha).NotEmpty().WithErrorCode("").WithMessage("Debe Indicar el texto Captcha");
         }
     }
 
@@ -107,7 +108,8 @@ namespace GestionClaves.BL.Validadores
     {
         public ValidadorSolicitarCambio()
         {
-            RuleFor(f => f.Usuario).NotEmpty().WithErrorCode("").WithMessage("Debe Indicar el Usuario");
+            
+            RuleFor(f => f.Correo).Cascade(CascadeMode.StopOnFirstFailure).NotNull().NotEmpty().EmailAddress().WithErrorCode("").WithMessage("Correo No Válido: '{0}'", f => f.Correo);
             RuleFor(f => f.Captcha).NotEmpty().WithErrorCode("").WithMessage("Debe Indicar el texto Captcha");
         }
     }

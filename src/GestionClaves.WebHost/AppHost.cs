@@ -15,6 +15,7 @@ using GestionClaves.Modelos.Config;
 using ServiceStack.MiniProfiler.Data;
 using ServiceStack.MiniProfiler;
 using System.Net.Mime;
+using ServiceStack.Caching;
 
 namespace GestionClaves.WebHost
 {
@@ -75,6 +76,8 @@ namespace GestionClaves.WebHost
 
             container.Register<IGestorUsuarios>(gestorUsuarios);
             container.Register<IProveedorValores>(valores);
+
+            container.Register<ICacheClient>(new MemoryCacheClient { FlushOnDispose = false });
 
         }
     }

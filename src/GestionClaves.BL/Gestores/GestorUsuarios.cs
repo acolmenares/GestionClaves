@@ -35,13 +35,29 @@ namespace GestionClaves.BL.Gestores
             return new ActualizarContrasenaResponse { CorreoResponse = cr };
         }
 
+        public SolicitarContrasenaResponse SolicitarGeneracionContrasena(SolicitarContrasena request)
+        {
+            ValidadorGestorUsuarios.ValidarPeticion(request);
+            var usuario = FabricaConexiones.Ejecutar<Usuario>(conexion =>
+            {
+                var u = RepoUsuario.ConsultarPorCorreo(conexion, request.Correo);
+                ValidadorGestorUsuarios.ValidarActivoConCorreo(u);
+                u.Token = Valores.CrearToken();
+                RepoUsuario.ActualizarToken(conexion, u);
+                return u;
+            });
+            var cr = Correo.EnviarTokenGeneracionContrasena(usuario); //new CorreoResponse(); //
+            return new SolicitarContrasenaResponse { MailResponse = cr };
+        }
+
+
         public ConfirmarContrasenaResponse GenerarContrasena(ConfirmarContrasena request)
         {
             ValidadorGestorUsuarios.ValidarPeticion(request);
             var nuevaContrasena = string.Empty;
             var usuario = FabricaConexiones.Ejecutar<Usuario>(conexion =>
             {
-                var u = RepoUsuario.ConsultarPorNombreUsuario(conexion, request.Usuario);
+                var u = RepoUsuario.ConsultarPorCorreo(conexion, request.Correo);
                 ValidadorGestorUsuarios.ValidarActivoConCorreo(u);
                 VerificarToken(request, u);
                 nuevaContrasena = Valores.CrearContrasenaAleatoria();
@@ -56,13 +72,13 @@ namespace GestionClaves.BL.Gestores
 
         private void VerificarToken(ConfirmarContrasena request, Usuario u)
         {
-            ValidateAndThrow(() => u.Token == request.Token, "Token", "Token no Válido", "");
+            ValidateAndThrow(() => u.Token == request.Token, "Token", "Código de Confirmación No Válido", "");
         }
 
         private void VerificarContrasena(ActualizarContrasena request,Usuario usuario)
         {
             ValidateAndThrow(() => ProveedorHash.VerificarHash(request.ContrasenaActual, usuario.PasswordHash, usuario.Salt),
-                "Usuario", "Usuario / Contraseña inválidos", "");            
+                "Usuario", "Usuario/Contraseña inválidos", "");            
         }
                 
 
@@ -75,19 +91,6 @@ namespace GestionClaves.BL.Gestores
             usuario.Salt = salt;
         }
 
-        public SolicitarContrasenaResponse SolicitarGeneracionContrasena(SolicitarContrasena request)
-        {
-            ValidadorGestorUsuarios.ValidarPeticion(request);
-            var usuario = FabricaConexiones.Ejecutar<Usuario>(conexion =>
-            {
-                var u = RepoUsuario.ConsultarPorNombreUsuario(conexion, request.Usuario);
-                ValidadorGestorUsuarios.ValidarActivoConCorreo(u);
-                u.Token = Valores.CrearToken();
-                RepoUsuario.ActualizarToken(conexion, u);
-                return u;
-            });
-            var cr = Correo.EnviarTokenGeneracionContrasena(usuario); //new CorreoResponse(); //
-            return new SolicitarContrasenaResponse { MailResponse = cr };
-        }
+       
     }
 }

@@ -9,6 +9,7 @@ namespace GestionClaves.Modelos.Interfaces
 {
     public interface IRepoUsuario
     {
+        Usuario ConsultarPorCorreo(IConexion conexion, string correo);
         Usuario ConsultarPorNombreUsuario(IConexion conexion,string nombreUsuario);
         int ActualizarContrasena(IConexion conexion, Usuario usuario);
         int ActualizarToken(IConexion conexion, Usuario u);

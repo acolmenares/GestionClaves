@@ -43,6 +43,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="manifest.json" />
     <None Include="Properties\PublishProfiles\mio.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -52,7 +53,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="index.html" />
+    <Content Include="robots.txt" />
+    <Content Include="scripts\aicl-lib.js" />
+    <Content Include="sw-import.js" />
     <Content Include="Templates\HtmlFormat.html" />
     <Content Include="Templates\IndexOperations.html" />
     <Content Include="Templates\OperationControl.html" />
@@ -66,7 +72,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="scripts\" />
+    <Folder Include="bower_components\" />
+    <Folder Include="elements\" />
+    <Folder Include="images\" />
+    <Folder Include="styles\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

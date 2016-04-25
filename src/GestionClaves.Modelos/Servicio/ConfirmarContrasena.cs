@@ -11,7 +11,7 @@ namespace GestionClaves.Modelos.Servicio
 {
     public class ConfirmarContrasena:IReturn<ConfirmarContrasenaResponse>, IHasCaptcha
     {
-        public string Usuario { get; set; }
+        public string Correo { get; set; }
         public string Token { get; set; }
         public string Captcha { get; set; }
     }

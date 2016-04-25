@@ -6,7 +6,7 @@ namespace GestionClaves.Modelos.Servicio
 {
     public class SolicitarContrasena:IReturn<SolicitarContrasenaResponse>, IHasCaptcha
     {
-        public string Usuario { get; set; }
+        public string Correo { get; set; }
         public string Captcha { get; set; }
     }
 
