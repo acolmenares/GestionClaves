@@ -17682,6 +17682,475 @@ It will also ensure that focus remains in the dialog.
   });
 
 </script>
+<script>
+
+  /** @polymerBehavior */
+  Polymer.PaperSpinnerBehavior = {
+
+    listeners: {
+      'animationend': '__reset',
+      'webkitAnimationEnd': '__reset'
+    },
+
+    properties: {
+      /**
+       * Displays the spinner.
+       */
+      active: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        observer: '__activeChanged'
+      },
+
+      /**
+       * Alternative text content for accessibility support.
+       * If alt is present, it will add an aria-label whose content matches alt when active.
+       * If alt is not present, it will default to 'loading' as the alt value.
+       */
+      alt: {
+        type: String,
+        value: 'loading',
+        observer: '__altChanged'
+      },
+
+      __coolingDown: {
+        type: Boolean,
+        value: false
+      }
+    },
+
+    __computeContainerClasses: function(active, coolingDown) {
+      return [
+        active || coolingDown ? 'active' : '',
+        coolingDown ? 'cooldown' : ''
+      ].join(' ');
+    },
+
+    __activeChanged: function(active, old) {
+      this.__setAriaHidden(!active);
+      this.__coolingDown = !active && old;
+    },
+
+    __altChanged: function(alt) {
+      // user-provided `aria-label` takes precedence over prototype default
+      if (alt === this.getPropertyInfo('alt').value) {
+        this.alt = this.getAttribute('aria-label') || alt;
+      } else {
+        this.__setAriaHidden(alt==='');
+        this.setAttribute('aria-label', alt);
+      }
+    },
+
+    __setAriaHidden: function(hidden) {
+      var attr = 'aria-hidden';
+      if (hidden) {
+        this.setAttribute(attr, 'true');
+      } else {
+        this.removeAttribute(attr);
+      }
+    },
+
+    __reset: function() {
+      this.active = false;
+      this.__coolingDown = false;
+    }
+  };
+</script>
+<dom-module id="paper-spinner-styles" assetpath="../bower_components/paper-spinner/">
+  <template>
+    <style>
+      /*
+      /**************************/
+      /* STYLES FOR THE SPINNER */
+      /**************************/
+
+      /*
+       * Constants:
+       *      ARCSIZE     = 270 degrees (amount of circle the arc takes up)
+       *      ARCTIME     = 1333ms (time it takes to expand and contract arc)
+       *      ARCSTARTROT = 216 degrees (how much the start location of the arc
+       *                                should rotate each time, 216 gives us a
+       *                                5 pointed star shape (it's 360/5 * 3).
+       *                                For a 7 pointed star, we might do
+       *                                360/7 * 3 = 154.286)
+       *      CONTAINERWIDTH = 28px
+       *      SHRINK_TIME = 400ms
+       */
+
+      :host {
+        display: inline-block;
+        position: relative;
+        width: 28px; /* CONTAINERWIDTH */
+        height: 28px; /* CONTAINERWIDTH */
+      }
+
+      #spinnerContainer {
+        width: 100%;
+        height: 100%;
+
+        /* The spinner does not have any contents that would have to be
+         * flipped if the direction changes. Always use ltr so that the
+         * style works out correctly in both cases. */
+        direction: ltr;
+      }
+
+      #spinnerContainer.active {
+        /* duration: 360 * ARCTIME / (ARCSTARTROT + (360-ARCSIZE)) */
+        -webkit-animation: container-rotate 1568ms linear infinite;
+        animation: container-rotate 1568ms linear infinite;
+      }
+
+      @-webkit-keyframes container-rotate {
+        to { -webkit-transform: rotate(360deg) }
+      }
+
+      @keyframes container-rotate {
+        to { transform: rotate(360deg) }
+      }
+
+      .spinner-layer {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        white-space: nowrap;
+        border-color: var(--paper-spinner-color, --google-blue-500);
+      }
+
+      .layer-1 {
+        border-color: var(--paper-spinner-layer-1-color, --google-blue-500);
+      }
+
+      .layer-2 {
+        border-color: var(--paper-spinner-layer-2-color, --google-red-500);
+      }
+
+      .layer-3 {
+        border-color: var(--paper-spinner-layer-3-color, --google-yellow-500);
+      }
+
+      .layer-4 {
+        border-color: var(--paper-spinner-layer-4-color, --google-green-500);
+      }
+
+      /**
+       * IMPORTANT NOTE ABOUT CSS ANIMATION PROPERTIES (keanulee):
+       *
+       * iOS Safari (tested on iOS 8.1) does not handle animation-delay very well - it doesn't
+       * guarantee that the animation will start _exactly_ after that value. So we avoid using
+       * animation-delay and instead set custom keyframes for each color (as layer-2undant as it
+       * seems).
+       *
+       * We write out each animation in full (instead of separating animation-name,
+       * animation-duration, etc.) because under the polyfill, Safari does not recognize those
+       * specific properties properly, treats them as -webkit-animation, and overrides the
+       * other animation rules. See https://github.com/Polymer/platform/issues/53.
+       */
+      .active .spinner-layer {
+        /* durations: 4 * ARCTIME */
+        -webkit-animation: fill-unfill-rotate 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;
+        animation: fill-unfill-rotate 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;
+        opacity: 1;
+      }
+
+      .active .spinner-layer.layer-1 {
+        /* durations: 4 * ARCTIME */
+        -webkit-animation: fill-unfill-rotate 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both, layer-1-fade-in-out 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;
+        animation: fill-unfill-rotate 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both, layer-1-fade-in-out 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;
+      }
+
+      .active .spinner-layer.layer-2 {
+        /* durations: 4 * ARCTIME */
+        -webkit-animation: fill-unfill-rotate 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both, layer-2-fade-in-out 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;
+        animation: fill-unfill-rotate 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both, layer-2-fade-in-out 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;
+      }
+
+      .active .spinner-layer.layer-3 {
+        /* durations: 4 * ARCTIME */
+        -webkit-animation: fill-unfill-rotate 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both, layer-3-fade-in-out 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;
+        animation: fill-unfill-rotate 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both, layer-3-fade-in-out 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;
+      }
+
+      .active .spinner-layer.layer-4 {
+        /* durations: 4 * ARCTIME */
+        -webkit-animation: fill-unfill-rotate 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both, layer-4-fade-in-out 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;
+        animation: fill-unfill-rotate 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both, layer-4-fade-in-out 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;
+      }
+
+      @-webkit-keyframes fill-unfill-rotate {
+        12.5% { -webkit-transform: rotate(135deg);  } /* 0.5 * ARCSIZE */
+        25%   { -webkit-transform: rotate(270deg);  } /* 1   * ARCSIZE */
+        37.5% { -webkit-transform: rotate(405deg);  } /* 1.5 * ARCSIZE */
+        50%   { -webkit-transform: rotate(540deg);  } /* 2   * ARCSIZE */
+        62.5% { -webkit-transform: rotate(675deg);  } /* 2.5 * ARCSIZE */
+        75%   { -webkit-transform: rotate(810deg);  } /* 3   * ARCSIZE */
+        87.5% { -webkit-transform: rotate(945deg);  } /* 3.5 * ARCSIZE */
+        to    { -webkit-transform: rotate(1080deg); } /* 4   * ARCSIZE */
+      }
+
+      @keyframes fill-unfill-rotate {
+        12.5% { transform: rotate(135deg);  } /* 0.5 * ARCSIZE */
+        25%   { transform: rotate(270deg);  } /* 1   * ARCSIZE */
+        37.5% { transform: rotate(405deg);  } /* 1.5 * ARCSIZE */
+        50%   { transform: rotate(540deg);  } /* 2   * ARCSIZE */
+        62.5% { transform: rotate(675deg);  } /* 2.5 * ARCSIZE */
+        75%   { transform: rotate(810deg);  } /* 3   * ARCSIZE */
+        87.5% { transform: rotate(945deg);  } /* 3.5 * ARCSIZE */
+        to    { transform: rotate(1080deg); } /* 4   * ARCSIZE */
+      }
+
+      /**
+       * HACK: Even though the intention is to have the current .spinner-layer at
+       * `opacity: 1`, we set it to `opacity: 0.99` instead since this forces Chrome
+       * to do proper subpixel rendering for the elements being animated. This is
+       * especially visible in Chrome 39 on Ubuntu 14.04. See:
+       *
+       * - https://github.com/Polymer/paper-spinner/issues/9
+       * - https://code.google.com/p/chromium/issues/detail?id=436255
+       */
+      @-webkit-keyframes layer-1-fade-in-out {
+        from { opacity: 0.99; }
+        25% { opacity: 0.99; }
+        26% { opacity: 0; }
+        89% { opacity: 0; }
+        90% { opacity: 0.99; }
+        100% { opacity: 0.99; }
+      }
+
+      @keyframes layer-1-fade-in-out {
+        from { opacity: 0.99; }
+        25% { opacity: 0.99; }
+        26% { opacity: 0; }
+        89% { opacity: 0; }
+        90% { opacity: 0.99; }
+        100% { opacity: 0.99; }
+      }
+
+      @-webkit-keyframes layer-2-fade-in-out {
+        from { opacity: 0; }
+        15% { opacity: 0; }
+        25% { opacity: 0.99; }
+        50% { opacity: 0.99; }
+        51% { opacity: 0; }
+      }
+
+      @keyframes layer-2-fade-in-out {
+        from { opacity: 0; }
+        15% { opacity: 0; }
+        25% { opacity: 0.99; }
+        50% { opacity: 0.99; }
+        51% { opacity: 0; }
+      }
+
+      @-webkit-keyframes layer-3-fade-in-out {
+        from { opacity: 0; }
+        40% { opacity: 0; }
+        50% { opacity: 0.99; }
+        75% { opacity: 0.99; }
+        76% { opacity: 0; }
+      }
+
+      @keyframes layer-3-fade-in-out {
+        from { opacity: 0; }
+        40% { opacity: 0; }
+        50% { opacity: 0.99; }
+        75% { opacity: 0.99; }
+        76% { opacity: 0; }
+      }
+
+      @-webkit-keyframes layer-4-fade-in-out {
+        from { opacity: 0; }
+        65% { opacity: 0; }
+        75% { opacity: 0.99; }
+        90% { opacity: 0.99; }
+        100% { opacity: 0; }
+      }
+
+      @keyframes layer-4-fade-in-out {
+        from { opacity: 0; }
+        65% { opacity: 0; }
+        75% { opacity: 0.99; }
+        90% { opacity: 0.99; }
+        100% { opacity: 0; }
+      }
+
+      /**
+       * Patch the gap that appear between the two adjacent div.circle-clipper while the
+       * spinner is rotating (appears on Chrome 38, Safari 7.1, and IE 11).
+       *
+       * Update: the gap no longer appears on Chrome when .spinner-layer's opacity is 0.99,
+       * but still does on Safari and IE.
+       */
+      .gap-patch {
+        position: absolute;
+        box-sizing: border-box;
+        top: 0;
+        left: 45%;
+        width: 10%;
+        height: 100%;
+        overflow: hidden;
+        border-color: inherit;
+      }
+
+      .gap-patch .circle {
+        width: 1000%;
+        left: -450%;
+      }
+
+      .circle-clipper {
+        display: inline-block;
+        position: relative;
+        width: 50%;
+        height: 100%;
+        overflow: hidden;
+        border-color: inherit;
+      }
+
+      .circle-clipper .circle {
+        width: 200%;
+      }
+
+      .circle {
+        box-sizing: border-box;
+        height: 100%;
+        border-width: var(--paper-spinner-stroke-width, 3px); /* STROKEWIDTH */
+        border-style: solid;
+        border-color: inherit;
+        border-bottom-color: transparent !important;
+        border-radius: 50%;
+        -webkit-animation: none;
+        animation: none;
+
+        @apply(--layout-fit);
+      }
+
+      .circle-clipper.left .circle {
+        border-right-color: transparent !important;
+        -webkit-transform: rotate(129deg);
+        transform: rotate(129deg);
+      }
+
+      .circle-clipper.right .circle {
+        left: -100%;
+        border-left-color: transparent !important;
+        -webkit-transform: rotate(-129deg);
+        transform: rotate(-129deg);
+      }
+
+      .active .circle-clipper.left .circle {
+        /* duration: ARCTIME */
+        -webkit-animation: left-spin 1333ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;
+        animation: left-spin 1333ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;
+      }
+
+      .active .circle-clipper.right .circle {
+        /* duration: ARCTIME */
+        -webkit-animation: right-spin 1333ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;
+        animation: right-spin 1333ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;
+      }
+
+      @-webkit-keyframes left-spin {
+        from { -webkit-transform: rotate(130deg); }
+        50% { -webkit-transform: rotate(-5deg); }
+        to { -webkit-transform: rotate(130deg); }
+      }
+
+      @keyframes left-spin {
+        from { transform: rotate(130deg); }
+        50% { transform: rotate(-5deg); }
+        to { transform: rotate(130deg); }
+      }
+
+      @-webkit-keyframes right-spin {
+        from { -webkit-transform: rotate(-130deg); }
+        50% { -webkit-transform: rotate(5deg); }
+        to { -webkit-transform: rotate(-130deg); }
+      }
+
+      @keyframes right-spin {
+        from { transform: rotate(-130deg); }
+        50% { transform: rotate(5deg); }
+        to { transform: rotate(-130deg); }
+      }
+
+      #spinnerContainer.cooldown {
+        /* duration: SHRINK_TIME */
+        -webkit-animation: container-rotate 1568ms linear infinite, fade-out 400ms cubic-bezier(0.4, 0.0, 0.2, 1);
+        animation: container-rotate 1568ms linear infinite, fade-out 400ms cubic-bezier(0.4, 0.0, 0.2, 1);
+      }
+
+      @-webkit-keyframes fade-out {
+        from { opacity: 0.99; }
+        to { opacity: 0; }
+      }
+
+      @keyframes fade-out {
+        from { opacity: 0.99; }
+        to { opacity: 0; }
+      }
+    </style>
+  </template>
+</dom-module>
+
+
+<dom-module id="paper-spinner" assetpath="../bower_components/paper-spinner/">
+  <template>
+    <style include="paper-spinner-styles"></style>
+
+    <div id="spinnerContainer" class-name="[[__computeContainerClasses(active, __coolingDown)]]">
+      <div class="spinner-layer layer-1">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div><div class="gap-patch">
+          <div class="circle"></div>
+        </div><div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+
+      <div class="spinner-layer layer-2">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div><div class="gap-patch">
+          <div class="circle"></div>
+        </div><div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+
+      <div class="spinner-layer layer-3">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div><div class="gap-patch">
+          <div class="circle"></div>
+        </div><div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+
+      <div class="spinner-layer layer-4">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div><div class="gap-patch">
+          <div class="circle"></div>
+        </div><div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'paper-spinner',
+
+      behaviors: [
+        Polymer.PaperSpinnerBehavior
+      ]
+    });
+  </script>
+</dom-module>
 <script>function MakePromise (asap) {
   function Promise(fn) {
 		if (typeof this !== 'object' || typeof fn !== 'function') throw new TypeError();
@@ -21303,8 +21772,8 @@ is separate from validation, and `allowed-pattern` does not affect how the input
         <div class="content">
           <paper-input name="Usuario" label="Usuario" required="" auto-validate="" id="usuario"></paper-input>
           <paper-input name="ContrasenaActual" label="Contraseña Actual" required="" type="password" id="contrasenaActual"></paper-input>
-          <paper-input name="NuevaContrasena" label="Nueva Contraseña" required="" type="password" id="nuevaContrasena"></paper-input>
-          <paper-input name="ConfirmaNuevaContrasena" label="Confirme Nueva Contraseña" required="" type="password" id="nuevaContrasenaConfirmada"></paper-input>
+          <paper-input name="NuevaContrasena" label="Nueva Contraseña" required="" type="password" minlength="10" id="nuevaContrasena"></paper-input>
+          <paper-input name="ConfirmaNuevaContrasena" label="Confirme Nueva Contraseña" required="" type="password" minlength="10" id="nuevaContrasenaConfirmada"></paper-input>
           <div class="center">
             <img class="img-captcha" src$="{{encodedCaptcha}}" on-tap="refrescarCaptcha">
           </div>
@@ -21438,7 +21907,7 @@ is separate from validation, and `allowed-pattern` does not affect how the input
       </paper-toolbar>
       <div class="container">
         <div class="content">
-          <paper-input name="Usuario" label="Usuario" required="" auto-validate="" id="usuario"></paper-input>
+          <paper-input name="Correo" label="Correo Registrado" required="" auto-validate="" id="correo" type="email"></paper-input>
           <div class="center">
             <img class="img-captcha" src$="{{encodedCaptcha}}" on-tap="refrescarCaptcha">
           </div>
@@ -21492,9 +21961,9 @@ is separate from validation, and `allowed-pattern` does not affect how the input
       },
       validar:function(){
         console.log("vamos a validar");
-        if (this.$.usuario.validate() & this.$.captcha.validate()){
+        if (this.$.correo.validate() & this.$.captcha.validate()){
           var data={
-            Usuario: this.$.usuario.value,
+            Correo: this.$.correo.value,
             Captcha: this.$.captcha.value
           };
           this.fire('procesar-solicitar-contrasena', data);
@@ -21554,7 +22023,7 @@ is separate from validation, and `allowed-pattern` does not affect how the input
       </paper-toolbar>
       <div class="container">
         <div class="content">
-          <paper-input name="Usuario" label="Usuario" required="" auto-validate="" id="usuario"></paper-input>
+          <paper-input name="Correo" label="Correo Registrado" required="" auto-validate="" id="correo" type="email"></paper-input>
           <paper-input name="Token" label="Código de Confirmación" required="" auto-validate="" id="token"></paper-input>
           <div class="center">
             <img class="img-captcha" src$="{{encodedCaptcha}}" on-tap="refrescarCaptcha">
@@ -21608,9 +22077,9 @@ is separate from validation, and `allowed-pattern` does not affect how the input
       },
       validar:function(){
         console.log("vamos a validar");
-        if (this.$.usuario.validate() & this.$.captcha.validate()){
+        if (this.$.correo.validate() & this.$.captcha.validate() & this.$.token.validate()){
           var data={
-            Usuario: this.$.usuario.value,
+            Correo: this.$.correo.value,
             Captcha: this.$.captcha.value,
             Token: this.$.token.value
           };
@@ -21638,15 +22107,15 @@ is separate from validation, and `allowed-pattern` does not affect how the input
         <paper-dialog-scrollable>
           <p>[[mensaje]]</p>
           <p>Estatus: [[response.Status]]</p>
-          <p>Texto: [[response.StatusText]] [[response.ResponseStatus.Message]] </p>
+          <p>Texto: [[response.StatusText]]: [[response.ResponseStatus.Message]] </p>
           <p>URL: [[response.ResponseUrl]]</p>
           <template is="dom-repeat" items="{{response.ResponseStatus.Errors}}">
-            <span>[[item.FieldName]] [[item.Message]]</span>
+            <span>[[item.FieldName]]: [[item.Message]]</span>
          </template>
 
         </paper-dialog-scrollable>
         <div class="buttons">
-          <paper-button dialog-confirm="" autofocus="">Cerrar</paper-button>
+          <paper-button dialog-confirm="" autofocus="" on-tap="_cerrar">Cerrar</paper-button>
         </div>
       </paper-dialog>
   </template>
@@ -21670,6 +22139,9 @@ is separate from validation, and `allowed-pattern` does not affect how the input
       },
       _calcularIcono:function (esError) {
         return esError? "thumb-down":"thumb-up";
+      },
+      _cerrar:function(){
+        this.fire("cerrar-dialogo");
       }
     });
   </script>
@@ -21716,23 +22188,51 @@ is separate from validation, and `allowed-pattern` does not affect how the input
   </script>
 
 </dom-module>
+<dom-module id="simple-overlay" assetpath="gc-principal/">
+
+  <style>
+    :host {
+      background: white;
+      color: black;
+      padding: 24px;
+      box-shadow: rgba(0, 0, 0, 0.24) -2.3408942051048403px 5.524510324047423px 12.090680100755666px 0px, rgba(0, 0, 0, 0.12) 0px 0px 12px 0px;
+    }
+  </style>
+
+  <template>
+    <content></content>
+  </template>
+
+</dom-module>
+
+<script>
+(function() {
+  Polymer({
+    is: 'simple-overlay',
+    behaviors: [
+      Polymer.IronOverlayBehavior
+    ]
+  });
+})();
+</script>
+Status
 <dom-module id="gc-principal" assetpath="gc-principal/">
-  <style is="custom-style" include="iron-flex iron-flex-alignment iron-positioning"></style>
+  <style is="custom-style" include="iron-flex iron-flex-alignment iron-positioning">
+  </style>
   <template>
       <neon-animated-pages class="fit" selected="[[selected]]">
         <gc-actualizar-contrasena on-mostrar-solicitar-contrasena="mostrarSolicitarContrasena" on-mostrar-confirmar-contrasena="mostrarConfirmarContrasena" on-procesar-actualizar-contrasena="procesarActualizarContrasena" encoded-captcha="{{encodedCaptcha}}" on-refrescar-captcha="generarCaptcha"></gc-actualizar-contrasena>
         <gc-solicitar-contrasena on-mostrar-actualizar-contrasena="mostrarActualizarContrasena" on-mostrar-confirmar-contrasena="mostrarConfirmarContrasena" on-procesar-solicitar-contrasena="procesarSolicitarContrasena" encoded-captcha="{{encodedCaptcha}}" on-refrescar-captcha="generarCaptcha">&gt;</gc-solicitar-contrasena>
         <gc-confirmar-contrasena on-mostrar-solicitar-contrasena="mostrarSolicitarContrasena" on-mostrar-actualizar-contrasena="mostrarActualizarContrasena" on-procesar-confirmar-contrasena="procesarConfirmarContrasena" encoded-captcha="{{encodedCaptcha}}" on-refrescar-captcha="generarCaptcha">&gt;</gc-confirmar-contrasena>
       </neon-animated-pages>
-      <paper-toast id="toast">
-        <span class="toast-hide-button" role="button" tabindex="0" on-tap:"hidetoast"="">Ok</span>
-      </paper-toast>
-      <gc-dialogo id="msgBox">
+      <simple-overlay id="backdrop" with-backdrop="">
+      <paper-spinner active=""></paper-spinner></simple-overlay>
+      <gc-dialogo id="msgBox" on-cerrar-dialogo="_procesarCerrarDialogo"></gc-dialogo>
       <gc-ajax id="ajaxActualizarContrasena" api="{{api}}" api-action="actualizarContrasena" body="{{datosActualizarContrasena}}" on-request-completed="handleActualizarContrasena"></gc-ajax>
       <gc-ajax id="ajaxSolicitarContrasena" api="{{api}}" api-action="solicitarContrasena" body="{{datosSolicitarContrasena}}" on-request-completed="handleSolicitarContrasena"></gc-ajax>
       <gc-ajax id="ajaxConfirmarContrasena" api="{{api}}" api-action="confirmarContrasena" body="{{datosConfirmarContrasena}}" on-request-completed="handleConfirmarContrasena"></gc-ajax>
       <gc-ajax id="ajaxGenerarCaptcha" api="{{api}}" api-action="generarCaptcha" body="{{datosGenerarCaptcha}}" on-request-completed="handleGenerarCaptcha"></gc-ajax>
-  </gc-dialogo></template>
+  </template>
 
   <script>
     Polymer({
@@ -21758,42 +22258,50 @@ is separate from validation, and `allowed-pattern` does not affect how the input
         this.selected=2;
       },
       procesarActualizarContrasena:function(data){
-
         this.datosActualizarContrasena= data.detail;
         this.$.ajaxActualizarContrasena.execute();
+        this.$.backdrop.open();
       },
       procesarSolicitarContrasena:function(data){
         console.log("procesarSolicitar", data.detail);
         this.datosSolicitarContrasena=data.detail;
         this.$.ajaxSolicitarContrasena.execute();
-
+        this.$.backdrop.open();
       },
       procesarConfirmarContrasena:function(data){
         console.log("procesarConfirmar", data.detail);
         this.datosConfirmarContrasena=data.detail;
         this.$.ajaxConfirmarContrasena.execute();
-
+        this.$.backdrop.open();
       },
       generarCaptcha:function(){
         this.$.ajaxGenerarCaptcha.execute();
+        this.$.backdrop.open();
       },
       handleActualizarContrasena:function(data){
+        this.$.backdrop.close();
         var rs = data.detail
         this.__mostrarOperacionFinalizada(rs,"Contraseña Actualizada !");
-        this.generarCaptcha();
+
       },
       handleSolicitarContrasena:function(data){
+        this.$.backdrop.close();
         var rs = data.detail
         this.__mostrarOperacionFinalizada(rs,"Revise el Código de Confirmación en su correo");
-        this.generarCaptcha();
+
       },
       handleConfirmarContrasena:function(data){
+        this.$.backdrop.close();
         var rs = data.detail
         this.__mostrarOperacionFinalizada(rs,"Contraseña Generada. Revise su correo");
-        this.generarCaptcha();
+
       },
       handleGenerarCaptcha:function(data){
+        this.$.backdrop.close();
         this.encodedCaptcha= data.detail.Response.TextoBase64;
+      },
+      _procesarCerrarDialogo:function(){
+        this.generarCaptcha();
       },
       /**
       *
