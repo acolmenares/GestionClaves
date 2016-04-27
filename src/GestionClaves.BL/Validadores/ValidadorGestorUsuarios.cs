@@ -85,12 +85,13 @@ namespace GestionClaves.BL.Validadores
 
         public ValidadorActualizarContrasena()
         {
-            MinLongitudContrasena = 10;
+            MinLongitudContrasena = 8;
             MaxLongitudContrasena = 32;
             RuleFor(f => f.Usuario).NotEmpty().WithErrorCode("").WithMessage("Debe Indicar el Usuario");
             RuleFor(f => f.ContrasenaActual).NotEmpty().WithErrorCode("").WithMessage("Debe Indicar la actual contraseña");
             RuleFor(f => f.NuevaContrasena).NotEmpty().WithErrorCode("").WithMessage("Debe Indicar la nueva contraseña");
             RuleFor(f => f.NuevaContrasena).Length(MinLongitudContrasena, MaxLongitudContrasena).WithErrorCode("").WithMessage("{0} <= Longitud Contraseña <= {1} ", MinLongitudContrasena, MaxLongitudContrasena);
+            RuleFor(f => f.NuevaContrasena).Matches("[0-9]").Matches("[a-z]").Matches("[A-Z]").WithErrorCode("").WithMessage("Mínimo: Un Dígito, Una Letra Minúscula, Una Letra Mayuscula");
         }
     }
 

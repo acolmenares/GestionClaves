@@ -43,7 +43,113 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="bower_components\platinum-sw\bootstrap\offline-analytics.js" />
+    <Content Include="bower_components\platinum-sw\bootstrap\simple-db.js" />
+    <Content Include="bower_components\platinum-sw\bootstrap\sw-toolbox-setup.js" />
+    <Content Include="bower_components\platinum-sw\demo\index.html" />
+    <Content Include="bower_components\platinum-sw\demo\sw-import.js" />
+    <Content Include="bower_components\platinum-sw\index.html" />
+    <Content Include="bower_components\platinum-sw\platinum-sw-cache.html" />
+    <Content Include="bower_components\platinum-sw\platinum-sw-elements.html" />
+    <Content Include="bower_components\platinum-sw\platinum-sw-fetch.html" />
+    <Content Include="bower_components\platinum-sw\platinum-sw-import-script.html" />
+    <Content Include="bower_components\platinum-sw\platinum-sw-offline-analytics.html" />
+    <Content Include="bower_components\platinum-sw\platinum-sw-register.html" />
+    <Content Include="bower_components\platinum-sw\service-worker.js" />
+    <Content Include="bower_components\platinum-sw\test\controlled-promise.js" />
+    <Content Include="bower_components\platinum-sw\test\index.html" />
+    <Content Include="bower_components\platinum-sw\test\platinum-sw-cache\file.html" />
+    <Content Include="bower_components\platinum-sw\test\platinum-sw-cache\file.txt" />
+    <Content Include="bower_components\platinum-sw\test\platinum-sw-cache\index.html" />
+    <Content Include="bower_components\platinum-sw\test\platinum-sw-cache\listed_in_json1.txt" />
+    <Content Include="bower_components\platinum-sw\test\platinum-sw-cache\listed_in_json2.txt" />
+    <Content Include="bower_components\platinum-sw\test\platinum-sw-cache\sw-import.js" />
+    <Content Include="bower_components\platinum-sw\test\platinum-sw-fetch\custom-fetch-handler.js" />
+    <Content Include="bower_components\platinum-sw\test\platinum-sw-fetch\index.html" />
+    <Content Include="bower_components\platinum-sw\test\platinum-sw-fetch\sw-import.js" />
+    <Content Include="bower_components\platinum-sw\test\platinum-sw-import-script\index.html" />
+    <Content Include="bower_components\platinum-sw\test\platinum-sw-import-script\post-message-echo.js" />
+    <Content Include="bower_components\platinum-sw\test\platinum-sw-import-script\sw-import.js" />
+    <Content Include="bower_components\platinum-sw\test\platinum-sw-register\index.html" />
+    <Content Include="bower_components\platinum-sw\test\platinum-sw-register\sw-import.js" />
+    <Content Include="bower_components\platinum-sw\test\platinum-sw-unsupported.html" />
+    <Content Include="bower_components\promise-polyfill\Gruntfile.js" />
+    <Content Include="bower_components\promise-polyfill\promise-polyfill-lite.html" />
+    <Content Include="bower_components\promise-polyfill\promise-polyfill.html" />
+    <Content Include="bower_components\promise-polyfill\Promise-Statics.js" />
+    <Content Include="bower_components\promise-polyfill\Promise.js" />
+    <Content Include="bower_components\promise-polyfill\Promise.min.js" />
+    <Content Include="bower_components\sw-toolbox\companion.js" />
+    <Content Include="bower_components\sw-toolbox\recipes\cache-expiration-options\app.js" />
+    <Content Include="bower_components\sw-toolbox\recipes\cache-expiration-options\index.html" />
+    <Content Include="bower_components\sw-toolbox\recipes\cache-expiration-options\service-worker.js" />
+    <Content Include="bower_components\sw-toolbox\recipes\cache-expiration-options\styles.css" />
+    <Content Include="bower_components\sw-toolbox\recipes\common.css" />
+    <Content Include="bower_components\sw-toolbox\recipes\index.html" />
+    <Content Include="bower_components\sw-toolbox\sw-toolbox.js" />
+    <Content Include="bower_components\sw-toolbox\test\browser-tests\precache\precache.js" />
+    <Content Include="bower_components\sw-toolbox\test\browser-tests\precache\serviceworkers\arrays.js" />
+    <Content Include="bower_components\sw-toolbox\test\browser-tests\precache\serviceworkers\custom-install.js" />
+    <Content Include="bower_components\sw-toolbox\test\browser-tests\precache\serviceworkers\mix.js" />
+    <Content Include="bower_components\sw-toolbox\test\browser-tests\precache\serviceworkers\non-existant-files.js" />
+    <Content Include="bower_components\sw-toolbox\test\browser-tests\precache\serviceworkers\promise-arrays.js" />
+    <Content Include="bower_components\sw-toolbox\test\browser-tests\precache\serviceworkers\promises.js" />
+    <Content Include="bower_components\sw-toolbox\test\browser-tests\precache\serviceworkers\simple.js" />
+    <Content Include="bower_components\sw-toolbox\test\browser-tests\precache\serviceworkers\single-item.js" />
+    <Content Include="bower_components\sw-toolbox\test\data\files\text-1.txt" />
+    <Content Include="bower_components\sw-toolbox\test\data\files\text-2.txt" />
+    <Content Include="bower_components\sw-toolbox\test\data\files\text-3.txt" />
+    <Content Include="bower_components\sw-toolbox\test\data\files\text-4.txt" />
+    <Content Include="bower_components\sw-toolbox\test\data\files\text-5.txt" />
+    <Content Include="bower_components\sw-toolbox\test\data\files\text-6.txt" />
+    <Content Include="bower_components\sw-toolbox\test\data\files\text-7.txt" />
+    <Content Include="bower_components\sw-toolbox\test\data\files\text-8.txt" />
+    <Content Include="bower_components\sw-toolbox\test\data\files\text.txt" />
+    <Content Include="bower_components\sw-toolbox\test\data\test-iframe.html" />
+    <Content Include="bower_components\sw-toolbox\test\index.html" />
+    <Content Include="bower_components\sw-toolbox\test\libs\helper-functions.js" />
+    <Content Include="bower_components\sw-toolbox\test\server\index.js" />
+    <Content Include="bower_components\webcomponentsjs\CustomElements.js" />
+    <Content Include="bower_components\webcomponentsjs\CustomElements.min.js" />
+    <Content Include="bower_components\webcomponentsjs\HTMLImports.js" />
+    <Content Include="bower_components\webcomponentsjs\HTMLImports.min.js" />
+    <Content Include="bower_components\webcomponentsjs\MutationObserver.js" />
+    <Content Include="bower_components\webcomponentsjs\MutationObserver.min.js" />
+    <Content Include="bower_components\webcomponentsjs\ShadowDOM.js" />
+    <Content Include="bower_components\webcomponentsjs\ShadowDOM.min.js" />
+    <Content Include="bower_components\webcomponentsjs\webcomponents-lite.js" />
+    <Content Include="bower_components\webcomponentsjs\webcomponents-lite.min.js" />
+    <Content Include="bower_components\webcomponentsjs\webcomponents.js" />
+    <Content Include="bower_components\webcomponentsjs\webcomponents.min.js" />
+    <Content Include="elements\elements.html" />
+    <Content Include="images\touch\apple-touch-icon.png" />
+    <Content Include="images\touch\chrome-splashscreen-icon-384x384.png" />
+    <Content Include="images\touch\chrome-touch-icon-192x192.png" />
+    <Content Include="images\touch\icon-128x128.png" />
+    <Content Include="images\touch\icon-512x512.png" />
+    <Content Include="images\touch\icon-72x72.png" />
+    <Content Include="images\touch\icon-96x96.png" />
+    <Content Include="images\touch\ms-icon-144x144.png" />
+    <Content Include="images\touch\ms-touch-icon-144x144-precomposed.png" />
     <Content Include="manifest.json" />
+    <Content Include="bower_components\platinum-sw\bower.json" />
+    <Content Include="bower_components\platinum-sw\CONTRIBUTING.md" />
+    <Content Include="bower_components\platinum-sw\README.md" />
+    <Content Include="bower_components\platinum-sw\test\platinum-sw-cache\cache-config.json" />
+    <Content Include="bower_components\promise-polyfill\bower.json" />
+    <Content Include="bower_components\promise-polyfill\LICENSE" />
+    <Content Include="bower_components\promise-polyfill\package.json" />
+    <Content Include="bower_components\promise-polyfill\README.md" />
+    <Content Include="bower_components\sw-toolbox\bower.json" />
+    <Content Include="bower_components\sw-toolbox\CONTRIBUTING.md" />
+    <Content Include="bower_components\sw-toolbox\LICENSE" />
+    <Content Include="bower_components\sw-toolbox\package.json" />
+    <Content Include="bower_components\sw-toolbox\README.md" />
+    <Content Include="bower_components\sw-toolbox\sw-toolbox.map.json" />
+    <Content Include="bower_components\webcomponentsjs\bower.json" />
+    <Content Include="bower_components\webcomponentsjs\build.log" />
+    <Content Include="bower_components\webcomponentsjs\package.json" />
+    <Content Include="bower_components\webcomponentsjs\README.md" />
     <None Include="Properties\PublishProfiles\mio.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -58,6 +164,9 @@
     <Content Include="index.html" />
     <Content Include="robots.txt" />
     <Content Include="scripts\aicl-lib.js" />
+    <Content Include="styles\app-theme.html" />
+    <Content Include="styles\main.css" />
+    <Content Include="styles\shared-styles.html" />
     <Content Include="sw-import.js" />
     <Content Include="Templates\HtmlFormat.html" />
     <Content Include="Templates\IndexOperations.html" />
@@ -71,12 +180,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="bower_components\" />
-    <Folder Include="elements\" />
-    <Folder Include="images\" />
-    <Folder Include="styles\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
