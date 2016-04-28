@@ -21772,8 +21772,8 @@ is separate from validation, and `allowed-pattern` does not affect how the input
         <div class="content">
           <paper-input name="Usuario" label="Usuario" required="" auto-validate="" id="usuario"></paper-input>
           <paper-input name="ContrasenaActual" label="Contraseña Actual" required="" type="password" id="contrasenaActual"></paper-input>
-          <paper-input name="NuevaContrasena" label="Nueva Contraseña" required="" type="password" minlength="10" id="nuevaContrasena"></paper-input>
-          <paper-input name="ConfirmaNuevaContrasena" label="Confirme Nueva Contraseña" required="" type="password" minlength="10" id="nuevaContrasenaConfirmada"></paper-input>
+          <paper-input name="NuevaContrasena" label="Nueva Contraseña" required="" type="password" minlength="8" id="nuevaContrasena"></paper-input>
+          <paper-input name="ConfirmaNuevaContrasena" label="Confirme Nueva Contraseña" required="" type="password" minlength="8" id="nuevaContrasenaConfirmada"></paper-input>
           <div class="center">
             <img class="img-captcha" src$="{{encodedCaptcha}}" on-tap="refrescarCaptcha">
           </div>
@@ -21827,20 +21827,24 @@ is separate from validation, and `allowed-pattern` does not affect how the input
       validar:function(){
         if (this.$.usuario.validate()
         & this.$.captcha.validate()
-        & this.$.contrasenaActual.validate() & this.$.nuevaContrasena.validate()
+        & this.$.contrasenaActual.validate()
+        & this.$.nuevaContrasena.validate()
         & this.$.nuevaContrasenaConfirmada.validate()){
-          if( this.$.contrasenaActual.value===this.$.nuevaContrasena.value){
-            this.$.nuevaContrasenaConfirmada.value="";
-            this.$.nuevaContrasenaConfirmada.invalid=true;
-            this.$.nuevaContrasena.focus();
-            this.$.nuevaContrasena.invalid=true;
-            this.$.nuevaContrasena.value="";
+          if( this.$.contrasenaActual.value===this.$.nuevaContrasena.value ){
+            console.log("this.$.contrasenaActual.value===this.$.nuevaContrasena.value ");
+            this._limpiarNueva();
             return;
           }
           if(this.$.nuevaContrasena.value!== this.$.nuevaContrasenaConfirmada.value){
+            console.console.log("this.$.nuevaContrasena.value!== this.$.nuevaContrasenaConfirmada.value");
             this.$.nuevaContrasenaConfirmada.invalid=true;
             this.$.nuevaContrasenaConfirmada.value="";
             this.$.nuevaContrasenaConfirmada.focus();
+            return;
+          }
+          if( !aicl.validatePasswordStrength(this.$.nuevaContrasena.value) ){
+            console.log(" !aicl.validatePasswordStrength(this.$.nuevaContrasena.value)");
+            this._limpiarNueva();
             return;
           }
           var data={
@@ -21854,8 +21858,15 @@ is separate from validation, and `allowed-pattern` does not affect how the input
       },
       refrescarCaptcha:function(){
         this.fire('refrescar-captcha');
+      },
+      _limpiarNueva:function(){
+        this.$.nuevaContrasenaConfirmada.value="";
+        this.$.nuevaContrasenaConfirmada.invalid=true;
+        this.$.nuevaContrasena.focus();
+        this.$.nuevaContrasena.invalid=true;
+        this.$.nuevaContrasena.value="";
+        return;
       }
-
     });
   </script>
 
@@ -22192,10 +22203,10 @@ is separate from validation, and `allowed-pattern` does not affect how the input
 
   <style>
     :host {
-      background: white;
+      /*background: white; */
       color: black;
       padding: 24px;
-      box-shadow: rgba(0, 0, 0, 0.24) -2.3408942051048403px 5.524510324047423px 12.090680100755666px 0px, rgba(0, 0, 0, 0.12) 0px 0px 12px 0px;
+      /* box-shadow: rgba(0, 0, 0, 0.24) -2.3408942051048403px 5.524510324047423px 12.090680100755666px 0px, rgba(0, 0, 0, 0.12) 0px 0px 12px 0px;*/
     }
   </style>
 
@@ -22218,6 +22229,10 @@ is separate from validation, and `allowed-pattern` does not affect how the input
 Status
 <dom-module id="gc-principal" assetpath="gc-principal/">
   <style is="custom-style" include="iron-flex iron-flex-alignment iron-positioning">
+  paper-spinner{
+    width: 100px;
+    height: 100px;
+  }
   </style>
   <template>
       <neon-animated-pages class="fit" selected="[[selected]]">

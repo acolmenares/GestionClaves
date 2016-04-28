@@ -1,0 +1,33 @@
+﻿CACHE MANIFEST
+# @@ 2015-04-27 18:21:25
+
+# Explicitly cached entrie
+
+# Additional resources to cache
+CACHE:
+elements/elements.html
+styles/app-theme.html
+styles/main.css
+styles/shared-styles.html
+scripts/aicl-lib.js
+bower_components/webcomponentsjs/CustomElements.js
+bower_components/webcomponentsjs/HTMLImports.js
+bower_components/webcomponentsjs/MutationObserver.js
+bower_components/webcomponentsjs/ShadowDOM.js
+bower_components/webcomponentsjs/webcomponents.js
+bower_components/webcomponentsjs/webcomponents-lite.js
+bower_components/webcomponentsjs/CustomElements.min.js
+bower_components/webcomponentsjs/HTMLImports.min.js
+bower_components/webcomponentsjs/MutationObserver.min.js
+bower_components/webcomponentsjs/ShadowDOM.min.js
+bower_components/webcomponentsjs/webcomponents.min.js
+bower_components/webcomponentsjs/webcomponents-lite.min.js
+
+
+# All other resources (e.g. sites) require the user to be online. 
+NETWORK:
+/gc-api
+
+# offline.html will be displayed if the user is offline
+FALLBACK:
+/ offline.html
