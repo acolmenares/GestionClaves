@@ -10,28 +10,27 @@ namespace GestionClaves.Servicio
         public ActualizarContrasenaResponse Post(ActualizarContrasena request)
         {
             ValidarCaptcha(request);
-            Captcha = "";
             return GestorUsuarios.ActualizarContrasena(request);
         }
 
         public ConfirmarContrasenaResponse Post(ConfirmarContrasena request)
         {
             ValidarCaptcha(request);
-            Captcha = "";
             return GestorUsuarios.GenerarContrasena(request);    
         }
 
         public SolicitarContrasenaResponse Post(SolicitarContrasena request)
         {
             ValidarCaptcha(request);
-            Captcha = "";
             return GestorUsuarios.SolicitarGeneracionContrasena(request);
         }
 
         private void ValidarCaptcha(IHasCaptcha request)
         {
+            var captcha = Captcha;
+            Captcha = "";
             ValidateAndThrow(() => !string.IsNullOrEmpty(request.Captcha), "Captcha", "Debe Indicar el texto Captcha", "");
-            ValidateAndThrow(() => request.Captcha==Captcha, "Captcha", "Texto Captcha no válido", "");
+            ValidateAndThrow(() => request.Captcha==captcha, "Captcha", "Texto Captcha no válido", "");
         }
 
     }
